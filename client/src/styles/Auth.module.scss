@@ -1,0 +1,37 @@
+@import '../utils/colors.scss';
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: $white;
+    .formContainer {
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        width: 600px;
+        padding: 50px;
+        border: 1px solid rgba($black, 0.4);
+        border-radius: 5px;
+        .title {
+            margin-bottom: 15px;
+        }
+        .form {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            .form_bottom {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                .redirectLink {
+                    color: $dark-primary;
+                }
+            }
+            input {
+                margin-bottom: 15px;
+            }
+        }
+    }
+}

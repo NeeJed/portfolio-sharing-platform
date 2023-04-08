@@ -1,0 +1,13 @@
+@import '../../utils/colors.scss';
+
+.input {
+    padding: 5px 10px;
+    border: 1px solid rgba($black, 0.4);
+    border-radius: 5px;
+    &:hover {
+        border-color: $light-black;
+    }
+    &:focus {
+        border-color: $primary;
+    }
+}

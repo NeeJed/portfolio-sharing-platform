@@ -1,0 +1,53 @@
+@import '../../utils/colors.scss';
+
+.button {
+    padding: 5px 10px;
+    align-self: start;
+    border-radius: 5px;
+    &_primary {
+        color: $primary;
+        background: transparent;
+        border: 1px solid $primary;
+        &:hover {
+            border-color: transparent;
+            background: $primary;
+            color: $white;
+        }
+        &:active {
+            border-color: $light-primary;
+            color: $white;
+            background: $dark-primary;
+            box-shadow: 0px 3px 0px inset $light-primary;
+        }
+        &[type="submit"] {
+            &:focus {
+                border: 1px solid $dark-primary;
+                outline: 1px solid $dark-primary;
+                outline-offset: 2px;
+            }
+        }
+    }
+    &_contrast {
+        color: $primary;
+        background: $white;
+        border: 1px solid $primary;
+        &[type="submit"] {
+            &:focus {
+                border: 1px solid $light-primary;
+                outline: 1px solid $light-primary;
+                outline-offset: 2px;
+            }
+        }
+        &:hover {
+            border-color: $dark-primary;
+            background: $gray;
+            color: $primary;
+        }
+        &:active {
+            border-color: $dark-primary;
+            color: $primary;
+            background: $gray;
+            box-shadow: 0px 3px 0px inset $white;
+        }
+    }
+}
