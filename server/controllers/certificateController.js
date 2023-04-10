@@ -32,18 +32,12 @@ class CertificateController {
         limit = limit || 9
         let offset = page * limit - limit
         let certificates;
-        // if (!brandId && !typeId) {
-        //     devices = await Device.findAndCountAll({limit, offset})
-        // }
-        // if (brandId && !typeId) {
-        //     devices = await Device.findAndCountAll({where: {brandId}, limit, offset})
-        // }
-        // if (!brandId && typeId) {
-        //     devices = await Device.findAndCountAll({where: {typeId}, limit, offset})
-        // }
-        // if (brandId && typeId) {
-        //     devices = await Device.findAndCountAll({where: {brandId, typeId}, limit, offset})
-        // }
+        if (!typeId) {
+            certificates = await Certificate.findAndCountAll({limit, offset})
+        }
+        if (typeId) {
+            certificates = await Certificate.findAndCountAll({where: {typeId}, limit, offset})
+        }
         return res.json(certificates)
     }
 
@@ -52,6 +46,19 @@ class CertificateController {
         const certificate = await Certificate.findOne(
             {
                 where: {id},
+                include: [{model: CertificateInfo, as: 'info'}]
+            },
+        )
+        return res.json(certificate)
+    }
+
+    async getAllByUserId(req, res) {
+        const {id} = req.params
+        limit = 6;
+        const certificate = await Certificate.findAndCountAll(
+            {
+                limit,
+                where: {userId: id},
                 include: [{model: CertificateInfo, as: 'info'}]
             },
         )

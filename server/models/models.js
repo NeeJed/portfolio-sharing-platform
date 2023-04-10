@@ -13,11 +13,12 @@ const UserInfo = sequelize.define('user_info', {
     name: {type: DataTypes.STRING, allowNull: false},
     lastName: {type: DataTypes.STRING},
     img: {type: DataTypes.STRING, allowNull: false},
+    shareAccess: {type: DataTypes.BOOLEAN, defaultValue: false},
 })
 
 const Certificate = sequelize.define('certificate', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    name: {type: DataTypes.STRING, unique: true, allowNull: false},
+    name: {type: DataTypes.STRING, allowNull: false},
     img: {type: DataTypes.STRING, allowNull: false},
 })
 

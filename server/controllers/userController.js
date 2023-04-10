@@ -25,7 +25,6 @@ class UserController {
         const hashPassword = await bcrypt.hash(password, 5)
         await UserInfo.create({
             name: email,
-            lastName: '',
             img: path.resolve(__dirname, '..', 'static', "defaultUserImage.jpg"),
             userId: user.id,
         })
@@ -51,6 +50,28 @@ class UserController {
     async check(req, res, next) {
         const token = generateJwt(req.user.id, req.user.email, req.user.role)
         return res.json({token})
+    }
+
+    async getAllUsers(req, res) {
+        let {limit, page} = req.query
+        page = page || 1
+        limit = limit || 9
+        let offset = page * limit - limit
+        let users;
+        users = await User.findAndCountAll({where: {shareAccess: true}, limit, offset})
+        return res.json(users)
+    }
+
+    async getUserById(req, res) {
+        const {id} = req.params
+        const user = await User.findOne(
+            {
+                where: {id},
+                where: {shareAccess: true},
+                include: [{model: CertificateInfo, as: 'info'}]
+            },
+        )
+        return res.json(user)
     }
 }
 
