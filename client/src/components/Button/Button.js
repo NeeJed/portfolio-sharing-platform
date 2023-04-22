@@ -1,21 +1,23 @@
 import React from 'react';
 import classes from './Button.module.css'
 
-const Button = ({title, type, variant}) => {
+const Button = ({...params}) => {
     let buttonStyle;
-    if (variant === 'primary') {
+    if (params.variant === 'primary') {
         buttonStyle = `${classes.button_primary}`;
-    } else if (variant === 'contrast') {
+    } else if (params.variant === 'primary_bg') {
+        buttonStyle = `${classes.button_primary_bg}`;
+    } else if (params.variant === 'contrast') {
         buttonStyle = `${classes.button_contrast}`;
     } else {
         buttonStyle = `${classes.button_primary}`;
     }
     return (
         <button
-            type={type}
             className={`${classes.button} ${buttonStyle}`}
+            {...params}
         >
-            {title}
+            {params.title}
         </button>
     )
 }

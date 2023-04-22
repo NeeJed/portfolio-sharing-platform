@@ -1,0 +1,10 @@
+@import '../../utils/colors.scss';
+
+.filterBlock {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    &_name {
+        color: $black;
+    }
+}

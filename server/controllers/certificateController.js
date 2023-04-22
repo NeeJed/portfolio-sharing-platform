@@ -5,7 +5,7 @@ const { json } = require('sequelize');
 
 class CertificateController {
     async create(req, res) {
-        const {name, typeId, info} = req.body
+        const {name, typeId, rankId, info} = req.body
         const {img} = req.files
         let fileName = uuid.v4() + ".jpg"
         img.mv(path.resolve(__dirname, '..', 'static', fileName))
@@ -21,22 +21,28 @@ class CertificateController {
             )
         }
 
-        const certificate = await Certificate.create({name, typeId, img: fileName})
+        const certificate = await Certificate.create({name, typeId, rankId, img: fileName})
 
         return res.json(certificate)
     }
 
     async getAll(req, res) {
-        let {typeId, limit, page} = req.query
+        let {typeId, rankId, limit, page} = req.query
         page = page || 1
         limit = limit || 9
         let offset = page * limit - limit
         let certificates;
-        if (!typeId) {
+        if (!typeId && !rankId) {
             certificates = await Certificate.findAndCountAll({limit, offset})
         }
-        if (typeId) {
+        if (typeId && !rankId) {
             certificates = await Certificate.findAndCountAll({where: {typeId}, limit, offset})
+        }
+        if (!typeId && rankId) {
+            certificates = await Certificate.findAndCountAll({where: {rankId}, limit, offset})
+        }
+        if (typeId && rankId) {
+            certificates = await Certificate.findAndCountAll({where: {typeId, rankId}, limit, offset})
         }
         return res.json(certificates)
     }

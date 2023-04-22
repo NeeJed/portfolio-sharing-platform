@@ -27,6 +27,27 @@
             }
         }
     }
+    &_primary_bg {
+        color: $white;
+        background: $primary;
+        border: 1px solid $primary;
+        &:hover {
+            background: $dark-primary;
+            border-color: $dark-primary;
+        }
+        &:active {
+            color: $white;
+            background: $dark-primary;
+            box-shadow: 0px 3px 0px inset $light-primary;
+        }
+        &[type="submit"] {
+            &:focus {
+                border: 1px solid $dark-primary;
+                outline: 1px solid $dark-primary;
+                outline-offset: 2px;
+            }
+        }
+    }
     &_contrast {
         color: $primary;
         background: $white;

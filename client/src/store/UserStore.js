@@ -4,9 +4,8 @@ const UserStore = createSlice({
     name: 'user',
     initialState: {
         _isAuth: false,
-        _user: {
-            name: 'den'
-        },
+        _user: {},
+        _userInfo: {},
     },
     reducers: {
         setIsAuth(state, action) {
@@ -15,9 +14,12 @@ const UserStore = createSlice({
         setUser(state, action) {
             state._user = action.payload;
         },
+        setUserInfo(state, action) {
+            state._userInfo = action.payload;
+        }
     },
 });
 
-export const {setIsAuth, setUser} = UserStore.actions;
+export const {setIsAuth, setUser, setUserInfo} = UserStore.actions;
 
 export default UserStore.reducer;

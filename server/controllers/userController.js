@@ -23,13 +23,14 @@ class UserController {
             return next(ApiError.badRequest('Пользователь с таким email уже существует'))
         }
         const hashPassword = await bcrypt.hash(password, 5)
-        await UserInfo.create({
-            name: email,
-            img: path.resolve(__dirname, '..', 'static', "defaultUserImage.jpg"),
-            userId: user.id,
-        })
         const user = await User.create({email, role, password: hashPassword})
         const token = generateJwt(user.id, user.email, user.role)
+        await UserInfo.create({
+            name: email,
+            // img: path.resolve(__dirname, '..', 'static', "defaultUserImage.jpg"),
+            img: 'defaultUserImage.jpg',
+            userId: user.id,
+        })
         return res.json({token})
     }
 
@@ -53,12 +54,13 @@ class UserController {
     }
 
     async getAllUsers(req, res) {
-        let {limit, page} = req.query
-        page = page || 1
-        limit = limit || 9
-        let offset = page * limit - limit
+        // let {limit, page} = req.query
+        // page = page || 1
+        // limit = limit || 9
+        // let offset = page * limit - limit
         let users;
-        users = await User.findAndCountAll({where: {shareAccess: true}, limit, offset})
+        users = await UserInfo.findAll()
+        // users = await User.findAndCountAll({where: {shareAccess: true}, limit, offset})
         return res.json(users)
     }
 
@@ -67,8 +69,18 @@ class UserController {
         const user = await User.findOne(
             {
                 where: {id},
-                where: {shareAccess: true},
-                include: [{model: CertificateInfo, as: 'info'}]
+                include: [{model: UserInfo}]
+            },
+        )
+        return res.json(user)
+    }
+
+    async getUserInfoById(req, res) {
+        const {id} = req.params
+            const user = await UserInfo.findOne(
+            {
+                where: {userId: id},
+                // where: {shareAccess: true},
             },
         )
         return res.json(user)

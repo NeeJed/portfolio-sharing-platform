@@ -1,0 +1,108 @@
+@import '../../utils/colors.scss';
+
+.bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    width: 100%;
+    background: $white;
+    .content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 50px;
+        width: 100%;
+        max-width: 1450px;
+        background: $white;
+    }
+    .left {
+        display: flex;
+        align-items: center;
+        margin: 0 0 0 30px;
+        .logo {
+            height: 35px;
+            width: 35px;
+            background: blue;
+            border-radius: 50%;
+        }
+        .links {
+            display: flex;
+            margin: 0 0 0 20px;
+            .link {
+                color: $black;
+                text-decoration: none;
+                text-decoration-style: none;
+                margin: 0 20px 0 0;
+            }
+        }
+    }
+    .right {
+        display: flex;
+        position: relative;
+        align-items: center;
+        height: 50px;
+        margin: 0 30px 0 0;
+        .user_logout {
+            background: transparent;
+            border: 0;
+            margin: 0 10px 0 20px;
+        }
+        .userInfo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            width: 200px;
+            background: transparent;
+            &:hover{
+                background: $gray;
+            }
+        }
+        .user_name {
+            margin-right: 10px;
+        }
+        .user_image {
+            display: flex;
+            height: 35px;
+            width: 35px;
+            background: blue;
+            border-radius: 50%;
+        }
+        .userMenu {
+            z-index: 1;
+            display: flex;
+            position: absolute;
+            top: 50px;
+            right: 0px;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-end;
+            height: auto;
+            width: auto;
+            background: $white;
+            border-radius: 0 0 10px 10px;
+            padding: 10px 0;
+            box-shadow: 0px 15px 15px 0px rgba($black, 0.2);
+            .userMenu_button {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 200px;
+                padding: 5px;
+                background: $white;
+                &:hover {
+                    background: $gray;
+                }
+                &:active {
+                    background: $dark-gray;
+                }
+            }
+        }
+        .authBtn {
+            background: transparent;
+            border: 0;
+            margin: 0 0 0 20px; 
+        }
+    }
+}

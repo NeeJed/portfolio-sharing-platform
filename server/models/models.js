@@ -27,6 +27,11 @@ const Type = sequelize.define('type', {
     name: {type: DataTypes.STRING, unique: true, allowNull: false},
 })
 
+const Rank = sequelize.define('rank', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    name: {type: DataTypes.STRING, unique: true},
+})
+
 const Rating = sequelize.define('rating', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     rate: {type: DataTypes.INTEGER, allowNull: false},
@@ -50,6 +55,9 @@ Certificate.belongsTo(User)
 Type.hasMany(Certificate)
 Certificate.belongsTo(Type)
 
+Rank.hasMany(Certificate)
+Certificate.belongsTo(Rank)
+
 Certificate.hasMany(CertificateInfo, {as: 'info'})
 CertificateInfo.belongsTo(Certificate)
 
@@ -58,6 +66,7 @@ module.exports = {
     UserInfo,
     Certificate,
     Type,
+    Rank,
     Rating,
     CertificateInfo,
 }

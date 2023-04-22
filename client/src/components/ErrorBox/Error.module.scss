@@ -1,0 +1,16 @@
+@import '../../utils/colors.scss';
+
+.errorContainer {
+    position: relative;
+}
+.errorMessage {
+    pointer-events: none;
+    display: block;
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    padding: 5px 10px;
+    background: rgba($red, 0.8);
+    border-radius: 5px;
+    color: $white;
+}

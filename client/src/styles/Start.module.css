@@ -1,0 +1,73 @@
+.container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100%;
+  height: 100%;
+  background: #FFF;
+}
+
+.welcomeBox {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  position: relative;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 100vh;
+  width: 100%;
+  background: #818181;
+  background-image: url(./students.jpg);
+  background-size: cover;
+  background-blend-mode: multiply;
+}
+
+.welcomeBox .searchBox {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  position: absolute;
+  top: 50%;
+  background: transparent;
+}
+
+.welcomeBox .searchBox input {
+  width: 500px;
+  padding: 10px 15px;
+  margin-right: 20px;
+}
+
+.welcomeBox .searchBox input::-webkit-input-placeholder {
+  color: rgba(5, 5, 5, 0.3);
+}
+
+.welcomeBox .searchBox input:-ms-input-placeholder {
+  color: rgba(5, 5, 5, 0.3);
+}
+
+.welcomeBox .searchBox input::-ms-input-placeholder {
+  color: rgba(5, 5, 5, 0.3);
+}
+
+.welcomeBox .searchBox input::placeholder {
+  color: rgba(5, 5, 5, 0.3);
+}
+
+.welcomeBox .searchBox button {
+  padding: 10px 15px;
+}

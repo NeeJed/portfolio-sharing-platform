@@ -1,0 +1,72 @@
+.spinBox {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  position: relative;
+}
+
+.spinBox_fullpage {
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+.spinBox_component {
+  height: auto;
+  width: auto;
+}
+
+.spin {
+  display: block;
+  height: 100px;
+  width: 100px;
+  margin: 0 auto;
+  background: transparent;
+  border: 2px solid #058C42;
+  border-radius: 50%;
+  -webkit-animation: infinite 2s rotates ease-in-out;
+          animation: infinite 2s rotates ease-in-out;
+}
+
+.spin_fullpage {
+  border-color: #984447;
+}
+
+.spin_component {
+  border-color: #255C99;
+}
+
+@-webkit-keyframes rotates {
+  0% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
+  50% {
+    -webkit-transform: scale(1.2);
+            transform: scale(1.2);
+  }
+  100% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
+}
+
+@keyframes rotates {
+  0% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
+  50% {
+    -webkit-transform: scale(1.2);
+            transform: scale(1.2);
+  }
+  100% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
+}
