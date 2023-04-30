@@ -103,13 +103,12 @@
 }
 
 .bar .right .user_image {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
+  display: block;
   height: 35px;
   width: 35px;
-  background: blue;
   border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 .bar .right .userMenu {

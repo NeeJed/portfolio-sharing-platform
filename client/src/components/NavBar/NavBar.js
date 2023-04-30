@@ -4,6 +4,7 @@ import classes from './NavBar.module.css';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { START_ROUTE, SEARCH_ROUTE, PROFILE_ROUTE, AUTH_ROUTE, REGISTRATION_ROUTE } from '../../utils/consts';
 import { setIsAuth, setUser } from '../../store/UserStore';
+import Button from '../Button/Button';
 
 const NavBar = () => {
     const user = useSelector(state => state.user)
@@ -23,7 +24,7 @@ const NavBar = () => {
     }
 
     return (
-        <div className={classes.bar}>
+        <nav className={classes.bar}>
             <div className={classes.content}>
                 <div className={classes.left}>
                     <NavLink className={classes.logo} to={START_ROUTE}></NavLink>
@@ -50,23 +51,30 @@ const NavBar = () => {
                             <div className={classes.user_name}>
                                 {user._user.email}
                             </div>
-                            <div
+                            <img
                                 className={classes.user_image}
-                            >
-                            </div>
+                                src={process.env.REACT_APP_API_URL+'/'+user._userInfo.img}
+                            />
                         </button>
                         {userMenuActive
                         ?
                             <div className={classes.userMenu} onClick={(e) => e.stopPropagation()}>
-                                <NavLink className={classes.userMenu_button} to={PROFILE_ROUTE}>Мой профиль</NavLink>
-                                <button className={classes.userMenu_button}>Настройки</button>
-                                <button className={classes.userMenu_button}>Сохранить</button>
-                                <button
+                                <NavLink className={classes.userMenu_button} to={PROFILE_ROUTE}
+                                    onClick={() => {
+                                        userMenuActive
+                                        ? setUserMenuActive(false)
+                                        : setUserMenuActive(true)
+                                    }}
+                                >
+                                    Мой профиль
+                                </NavLink>
+                                <Button className={classes.userMenu_button} title='Настройки'/>
+                                <Button className={classes.userMenu_button} title='Сохранить'/>
+                                <Button
                                     className={classes.userMenu_button}
                                     onClick={() => logOut()}
-                                >
-                                    Выйти
-                                </button>
+                                    title='Выйти'
+                                />
                             </div>
                         :
                             <div></div>
@@ -88,7 +96,7 @@ const NavBar = () => {
                     </div>
                 }
             </div>
-        </div>
+        </nav>
     )
 }
 

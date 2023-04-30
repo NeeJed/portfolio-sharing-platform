@@ -63,11 +63,11 @@
             margin-right: 10px;
         }
         .user_image {
-            display: flex;
+            display: block;
             height: 35px;
             width: 35px;
-            background: blue;
             border-radius: 50%;
+            object-fit: cover;
         }
         .userMenu {
             z-index: 1;

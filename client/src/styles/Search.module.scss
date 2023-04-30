@@ -87,30 +87,6 @@
                             margin-left: 10px;
                             color: $primary;
                         }
-                        .userRating {
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            line-height: 1;
-                            padding: 5px 10px;
-                            margin-left: 10px;
-                            color: $dark-primary;
-                            border-radius: 10px;
-                            border: 1px solid $dark-primary;
-                        }
-                    }
-                    .userCertificates {
-                        margin-top: 20px;
-                        display: flex;
-                        .certificate {
-                            color: $primary;
-                            .certificateImg {
-                                width: 90px;
-                                height: 90px;
-                                margin-right: 20px;
-                                border: 1px solid black;
-                            }
-                        }
                     }
                 }
             }

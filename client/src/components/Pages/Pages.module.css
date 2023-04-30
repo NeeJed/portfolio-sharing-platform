@@ -1,0 +1,23 @@
+.pagesContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.pagesContainer .pagesItem {
+  display: block;
+  width: 40px;
+  height: 40px;
+  margin-right: 5px;
+  border: 1px solid #050505;
+  background: #FCFCFC;
+  cursor: pointer;
+}
+
+.pagesContainer .pagesItem:last-child {
+  margin-right: 0;
+}
+
+.pagesContainer .pagesItem_current {
+  background: rgba(37, 92, 153, 0.2);
+}

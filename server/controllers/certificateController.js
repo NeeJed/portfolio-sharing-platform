@@ -5,23 +5,24 @@ const { json } = require('sequelize');
 
 class CertificateController {
     async create(req, res) {
-        const {name, typeId, rankId, info} = req.body
+        const {name, categoryId, typeId, rankId, userId, info} = req.body
         const {img} = req.files
         let fileName = uuid.v4() + ".jpg"
         img.mv(path.resolve(__dirname, '..', 'static', fileName))
 
+        console.log({name, categoryId, typeId, rankId, userId, img: fileName})
+        const certificate = await Certificate.create({name, categoryId, typeId, rankId, userId, img: fileName})
+
         if(info) {
-            info = JSON.parse(info)
-            info.foreach(i => 
+            let information = JSON.parse(info)
+            information.map(i => 
                 CertificateInfo.create({
                     title: i.title,
                     description: i.description,
                     certificateId: certificate.id
-                })    
+                })
             )
         }
-
-        const certificate = await Certificate.create({name, typeId, rankId, img: fileName})
 
         return res.json(certificate)
     }
@@ -29,7 +30,7 @@ class CertificateController {
     async getAll(req, res) {
         let {typeId, rankId, limit, page} = req.query
         page = page || 1
-        limit = limit || 9
+        limit = limit || 1
         let offset = page * limit - limit
         let certificates;
         if (!typeId && !rankId) {
@@ -60,10 +61,11 @@ class CertificateController {
 
     async getAllByUserId(req, res) {
         const {id} = req.params
-        limit = 6;
+        console.log(id)
+        // limit = 6;
         const certificate = await Certificate.findAndCountAll(
             {
-                limit,
+                // limit,
                 where: {userId: id},
                 include: [{model: CertificateInfo, as: 'info'}]
             },

@@ -1,5 +1,8 @@
 @import '../../utils/colors.scss';
 
+.checkboxContainer {
+    display: block;
+}
 .filterBlock_option {
     position: absolute;
     z-index: -1;

@@ -1,8 +1,5 @@
 .button {
   padding: 5px 10px;
-  -ms-flex-item-align: start;
-      -ms-grid-row-align: start;
-      align-self: start;
   border-radius: 5px;
 }
 

@@ -3,35 +3,57 @@ import classes from '../styles/Search.module.css';
 import Input from '../components/Input/Input';
 import Button from '../components/Button/Button';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchTypes, fetchRanks, createType, createRank, deleteType, deleteRank } from '../http/certificateAPI';
-import { setTypes, setRanks } from '../store/CertificateStore';
+import { fetchTypes, fetchRanks, createType, createRank, deleteType, deleteRank, fetchCategories, createCategory } from '../http/certificateAPI';
+import { setTypes, setRanks, setCategories } from '../store/CertificateStore';
 import { getAllUsers } from '../http/userAPI';
-import { setStudents } from '../store/StudentsStore';
-import Checkbox from '../components/Checkbox/Checkbox';
+import { setStudents, setTotalResults, setSelectedCategories, setSelectedTypes, setSelectedRanks } from '../store/StudentsStore';
 import LoadingSpin from '../components/LoadingSpin/LoadingSpin';
 import FilterGroup from '../components/FilterGroup/FilterGroup';
 import { useNavigate } from 'react-router-dom';
 import { SEARCH_ROUTE, USERPAGE_ROUTE } from '../utils/consts';
 import UserCard from '../components/UserCard/UserCard';
+import ErrorBox from '../components/ErrorBox/ErrorBox'
+import Pages from '../components/Pages/Pages';
+import Checkbox from '../components/Checkbox/Checkbox';
 
 const Search = () => {
     const students = useSelector(state => state.students._students)
-    const certificates = useSelector(state => state.certificate._certificates)
+    const totalResults = useSelector(state => state.students._totalResults)
+    const page = useSelector(state => state.students._page)
+    const limit = useSelector(state => state.students._limit)
+    const selectedCategories = useSelector(state => state.students._selectedCategories)
+    const selectedTypes = useSelector(state => state.students._selectedTypes)
+    const selectedRanks = useSelector(state => state.students._selectedRanks)
+    const categories = useSelector(state => state.certificate._categories)
     const types = useSelector(state => state.certificate._types)
     const ranks = useSelector(state => state.certificate._ranks)
-    const dispatch = useDispatch()
-    const [studentsIsLoading, setStudentsIsLoading] = useState(true)
 
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const [studentsIsLoading, setStudentsIsLoading] = useState(true)
+    const [errorMessage, setErrorMessage] = useState('')
 
+    const [category, setCategory] = useState()
+    const addCategory = async () => {
+        let data;
+        try {
+            data = await createCategory({name: category})
+            getCategories()
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    const [categoryForType, setCategoryForType] = useState()
     const [type, setType] = useState()
     const addType = async () => {
         let data;
         try {
-            data = await createType({name: type})
+            data = await createType({name: type, categoryId: categoryForType})
             getTypes()
         } catch (e) {
-            console.log(e)
+            setErrorMessage(e.response.data.message)
+            console.log(e.response.data.message)
         }
     }
 
@@ -42,7 +64,8 @@ const Search = () => {
             data = await createRank({name: rank})
             getRanks()
         } catch (e) {
-            console.log(e)
+            setErrorMessage(e.response.data.message)
+            console.log(e.response.data.message)
         }
     }
 
@@ -54,7 +77,8 @@ const Search = () => {
             console.log(data)
             getTypes()
         } catch (e) {
-            console.log(e)
+            setErrorMessage(e.response.data.message)
+            console.log(e.response.data.message)
         }
     }
     const [rankId, setRankId] = useState()
@@ -65,39 +89,46 @@ const Search = () => {
             console.log(data)
             getRanks()
         } catch (e) {
-            console.log(e)
+            setErrorMessage(e.response.data.message)
+            console.log(e.response.data.message)
         }
     }
 
+    const getCategories = async () => {
+        try {
+            let {data} = await fetchCategories()
+            dispatch(setCategories(data))
+            console.log('категории: ', data)
+        } catch (e) {
+            console.log(e)
+        }
+    }
     const getTypes = async () => {
         try {
             let {data} = await fetchTypes()
             dispatch(setTypes(data))
-            console.log(data)
+            console.log('типы: ', data)
         } catch (e) {
             console.log(e)
-        } finally {
-            
         }
     }
-
     const getRanks = async () => {
         try {
             let {data} = await fetchRanks()
             dispatch(setRanks(data))
-            console.log(data)
+            console.log('уровни: ', data)
         } catch (e) {
             console.log(e)
-        } finally {
-
         }
     }
-
     const getStudents = async () => {
         try {
-            let data = await getAllUsers()
-            dispatch(setStudents(data))
-            console.log(data)
+            let data = await getAllUsers(
+                selectedCategories, selectedTypes, selectedRanks, page, limit
+            )
+            dispatch(setStudents(data.rows))
+            dispatch(setTotalResults(data.count))
+            console.log('студенты: ', data.rows)
         } catch (e) {
             console.log(e)
         } finally {
@@ -106,20 +137,15 @@ const Search = () => {
     }
 
     useEffect( () => {
-        try {
-            getTypes()
-            getStudents()
-            getRanks()
-            // fetchTypes().then(({data}) => {
-            //     dispatch(setTypes(data))
-            // })
-            // getAllUsers().then(data => {
-            //     dispatch(setStudents(data))
-            // })
-        } catch (e) {
-            console.log(e)
-        }
+        getCategories()
+        getTypes()
+        getRanks()
+        getStudents()
     }, [])
+    
+    useEffect(() => {
+        getStudents()
+    }, [page, selectedCategories, selectedTypes, selectedRanks])
     
     return (
         <div
@@ -134,14 +160,27 @@ const Search = () => {
             </div>
             <div className={classes.mainBox}>
                 <div className={classes.mainBox_stats}>
-                    <div className={classes.searchData}>
-                        Получено результатов: {students.length}
-                    </div>
+                    <span className={classes.searchData}>
+                        Получено результатов: {totalResults}
+                    </span>
                 </div>
                 <div className={classes.mainBox_content}>
 
                     <div className={classes.mainBox_filter}>
                         <div>
+                            <input
+                                placeholder='категория'
+                                value={category}
+                                onChange={(e) => setCategory(e.target.value)}
+                            />
+                            <button onClick={() => addCategory()}>Добавить</button>
+                        </div>
+                        <div>
+                            <input
+                                placeholder='Категория, к которой относится тип'
+                                value={categoryForType}
+                                onChange={(e) => setCategoryForType(e.target.value)}
+                            />
                             <input
                                 placeholder='тип'
                                 value={type}
@@ -176,22 +215,45 @@ const Search = () => {
 
                     </div>
 
-                    <div className={classes.mainBox_filter}>
-                        <FilterGroup dataList={types} title='Типы'/>
-                        <FilterGroup dataList={ranks} title='Уровень достижения'/>
-                        <FilterGroup dataList={students} title='Юзеры'/>
-                    </div>
-                    <div className={classes.mainBox_searchResults}>
-                        {!studentsIsLoading
-                        ?
+                    <aside className={classes.mainBox_filter}>
+                        {
+                            errorMessage !== ''
+                            ?
+                            <ErrorBox
+                                errorMessage={errorMessage}
+                            />
+                            :
+                            <div></div>
+                        }
+                        {/* <FilterGroup dataList={categories} filterData={setSelectedCategories} title='Категория'/> */}
+                        {categories.map(category => 
                             <div>
-                                {students.map(student =>
-                                    <UserCard user={student}/>
+                                <h6>{category.name}</h6>
+                                {types.map(type => type.categoryId === category.id ?
+                                    <Checkbox key={type.id} data={type} filterData={setSelectedTypes}/>
+                                    : false
                                 )}
                             </div>
+                        )}
+                        {/* <FilterGroup dataList={types} filterData={setSelectedTypes} title='Тип'/> */}
+                        <FilterGroup dataList={ranks} filterData={setSelectedRanks} title='Уровень достижения'/>
+                    </aside>
+                    <section className={classes.mainBox_searchResults}>
+                        {!studentsIsLoading
+                        ?
+                            students.length
+                            ?
+                                <div>
+                                    {students.map(student =>
+                                        <UserCard user={student}/>
+                                    )}
+                                </div>
+                            :
+                                <div>Нет результатов</div>
                         : <LoadingSpin type='component'/>
                         }
-                    </div>
+                        <Pages/>
+                    </section>
                 </div>
             </div>
         </div>

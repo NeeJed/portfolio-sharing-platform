@@ -24,7 +24,9 @@ export const getUserProfileData = async (id) => {
     return data;
 }
 
-export const getAllUsers = async () => {
-    const {data} = await $host.get(`api/user/allusers`)
+export const getAllUsers = async (categoryId, typeId, rankId, page, limit) => {
+    const {data} = await $host.get(`api/user/allusers`, {params: {
+        categoryId, typeId, rankId, page, limit
+    }})
     return data;
 }

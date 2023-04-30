@@ -2,9 +2,16 @@ const {Type} = require('../models/models');
 const ApiError = require('../error/ApiError');
 
 class TypeController {
-    async create(req, res) {
-        const {name} = req.body
-        const type = await Type.create({name})
+    async create(req, res, next) {
+        const {name, categoryId} = req.body
+        const alreadyExists = await Type.findOne({where: {name, categoryId}})
+        if (alreadyExists) {
+            return next(ApiError.badRequest(`Тип с таким именем в этой категории уже существует`))
+        }
+        const type = await Type.create({
+            name: name,
+            categoryId: categoryId,
+        })
         return res.json(type)
     }
 

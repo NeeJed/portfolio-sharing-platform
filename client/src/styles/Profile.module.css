@@ -1,0 +1,112 @@
+.userProfile {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100%;
+  height: 100%;
+  background: #3C6EA6;
+}
+
+.userProfile_container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100%;
+  max-width: 1450px;
+  height: 100%;
+  background: #FCFCFC;
+}
+
+.userProfile_container .profileData {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  max-width: 1200px;
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #050505;
+}
+
+.userProfile_container .profileData_info {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 100%;
+  margin: 0 10px;
+}
+
+.userProfile_container .profileData .profileItem {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 30% 70%;
+      grid-template-columns: 30% 70%;
+  border-top: 1px solid #e9e9e9;
+  padding: 8px 15px;
+  background: #FCFCFC;
+}
+
+.userProfile_container .profileData .profileItem:last-child {
+  border-bottom: 1px solid whitesmoke;
+}
+
+.userProfile_container .profileData .profileItem_column {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.userProfile_container .profileData_image {
+  margin: 0 10px;
+}
+
+.userProfile_container .profileData .userImage {
+  display: block;
+  width: 200px;
+  height: 320px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.userProfile_container .profileCertificates {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (80px)[3];
+      grid-template-columns: repeat(3, 80px);
+  border: 1px solid #255C99;
+}
+
+.userProfile_container .profileCertificates .certificate {
+  display: -ms-grid;
+  display: grid;
+  width: 100px;
+}
+
+.userProfile_container .profileCertificates .certificate_img {
+  width: 80px;
+  height: 100px;
+}

@@ -1,7 +1,22 @@
 import {$authHost, $host} from './index'
 
-export const createType = async (type) => {
-    const {data} = await $authHost.post('api/type', type)
+export const createCategory = async (category) => {
+    const {data} = await $authHost.post('api/category', category)
+    return {data}
+}
+
+export const deleteCategory = async (categoryId) => {
+    const {data} = await $authHost.delete('api/category/deleteById' + categoryId, {categoryId})
+    return {data}
+}
+
+export const fetchCategories = async () => {
+    const {data} = await $host.get('api/category',)
+    return {data}
+}
+
+export const createType = async ({name, categoryId}) => {
+    const {data} = await $authHost.post('api/type', {name, categoryId} )
     return {data}
 }
 
@@ -42,5 +57,10 @@ export const fetchCertificates = async () => {
 
 export const fetchOneCertificate = async (id) => {
     const {data} = await $host.get('/api/certificate/', + id)
+    return {data}
+}
+
+export const fetchCertificatesByUserId = async (id) => {
+    const {data} = await $host.get('/api/certificate/user/' + id, {id})
     return {data}
 }

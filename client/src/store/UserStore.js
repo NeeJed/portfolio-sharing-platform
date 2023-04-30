@@ -6,6 +6,7 @@ const UserStore = createSlice({
         _isAuth: false,
         _user: {},
         _userInfo: {},
+        _userCertificates: [],
     },
     reducers: {
         setIsAuth(state, action) {
@@ -16,10 +17,13 @@ const UserStore = createSlice({
         },
         setUserInfo(state, action) {
             state._userInfo = action.payload;
-        }
+        },
+        setUserCertificates(state, action) {
+            state._userCertificates = action.payload;
+        },
     },
 });
 
-export const {setIsAuth, setUser, setUserInfo} = UserStore.actions;
+export const {setIsAuth, setUser, setUserInfo, setUserCertificates} = UserStore.actions;
 
 export default UserStore.reducer;

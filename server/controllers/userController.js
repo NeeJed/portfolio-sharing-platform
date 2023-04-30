@@ -2,7 +2,7 @@ const ApiError = require('../error/ApiError');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const path = require('path');
-const {User, UserInfo} = require('../models/models');
+const {User, UserInfo, Certificate} = require('../models/models');
 
 const generateJwt = (id, email, role) => {
     return jwt.sign(
@@ -27,7 +27,6 @@ class UserController {
         const token = generateJwt(user.id, user.email, user.role)
         await UserInfo.create({
             name: email,
-            // img: path.resolve(__dirname, '..', 'static', "defaultUserImage.jpg"),
             img: 'defaultUserImage.jpg',
             userId: user.id,
         })
@@ -53,14 +52,42 @@ class UserController {
         return res.json({token})
     }
 
-    async getAllUsers(req, res) {
-        // let {limit, page} = req.query
-        // page = page || 1
-        // limit = limit || 9
-        // let offset = page * limit - limit
-        let users;
-        users = await UserInfo.findAll()
-        // users = await User.findAndCountAll({where: {shareAccess: true}, limit, offset})
+    async getAllUsers(req, res, next) {
+        let {categoryId, typeId, rankId, limit, page} = req.query
+        page = page || 1
+        limit = limit || 7
+        categoryId = categoryId
+        typeId = typeId
+        rankId = rankId
+        let offset = page * limit - limit
+        let users
+        let certificates
+        if (!categoryId && !typeId && !rankId) {
+            certificates = await Certificate.findAll()
+        } else if (categoryId && !typeId && !rankId) {
+            certificates = await Certificate.findAll({where: {categoryId}})
+            console.log(certificates)
+        } else if (!categoryId && typeId && !rankId) {
+            certificates = await Certificate.findAll({where: {typeId}})
+        } else if (!categoryId && !typeId && rankId) {
+            certificates = await Certificate.findAll({where: {rankId}})
+        } else if (categoryId && typeId && !rankId) {
+            certificates = await Certificate.findAll({where: {categoryId, typeId}})
+        } else if (categoryId && !typeId && rankId) {
+            certificates = await Certificate.findAll({where: {categoryId, rankId}})
+        } else if (!categoryId && typeId && rankId) {
+            certificates = await Certificate.findAll({where: {typeId, rankId}})
+        } else if (categoryId && typeId && rankId) {
+            certificates = await Certificate.findAll({where: {
+                categoryId,
+                typeId,
+                rankId,
+            }})
+        }
+        let suitableUsers = []
+        certificates.map(certificate => suitableUsers.push(certificate.dataValues.userId))
+        suitableUsers = Array.from(new Set(suitableUsers))
+        users = await UserInfo.findAndCountAll({where: {shareAccess: false, userId: suitableUsers}, limit, offset})
         return res.json(users)
     }
 

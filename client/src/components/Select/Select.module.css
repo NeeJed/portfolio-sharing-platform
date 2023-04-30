@@ -1,0 +1,74 @@
+.userInfo {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  height: 100%;
+  width: 300px;
+  padding: 5px 10px;
+  margin: 0 0 5px 0;
+  background: transparent;
+  border: 1px solid #050505;
+  border-radius: 5px;
+}
+
+.userInfo:hover {
+  background: whitesmoke;
+}
+
+.userMenu {
+  z-index: 1;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  position: absolute;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+  height: auto;
+  width: auto;
+  background: #FCFCFC;
+  border-radius: 0 0 10px 10px;
+  padding: 10px 0px;
+  -webkit-box-shadow: 0px 15px 15px 0px rgba(5, 5, 5, 0.2);
+          box-shadow: 0px 15px 15px 0px rgba(5, 5, 5, 0.2);
+}
+
+.userMenu .userMenu_button {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 300px;
+  padding: 5px 10px;
+  background: #FCFCFC;
+}
+
+.userMenu .userMenu_button:last-child {
+  border-bottom: 0;
+}
+
+.userMenu .userMenu_button:hover {
+  background: whitesmoke;
+}
+
+.userMenu .userMenu_button:active {
+  background: #e9e9e9;
+}
