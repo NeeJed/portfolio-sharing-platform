@@ -26,7 +26,6 @@ class UserController {
         const user = await User.create({email, role, password: hashPassword})
         const token = generateJwt(user.id, user.email, user.role)
         await UserInfo.create({
-            name: email,
             img: 'defaultUserImage.jpg',
             userId: user.id,
         })
@@ -66,7 +65,6 @@ class UserController {
             certificates = await Certificate.findAll()
         } else if (categoryId && !typeId && !rankId) {
             certificates = await Certificate.findAll({where: {categoryId}})
-            console.log(certificates)
         } else if (!categoryId && typeId && !rankId) {
             certificates = await Certificate.findAll({where: {typeId}})
         } else if (!categoryId && !typeId && rankId) {
@@ -91,7 +89,7 @@ class UserController {
         return res.json(users)
     }
 
-    async getUserById(req, res) {
+    async getUserById(req, res, next) {
         const {id} = req.params
         const user = await User.findOne(
             {
@@ -99,18 +97,66 @@ class UserController {
                 include: [{model: UserInfo}]
             },
         )
+        if (!user) {
+            return next(ApiError.badRequest('Пользователь не найден'))
+        }
         return res.json(user)
     }
 
-    async getUserInfoById(req, res) {
+    async getUserInfoById(req, res, next) {
         const {id} = req.params
-            const user = await UserInfo.findOne(
+        const user = await UserInfo.findOne(
             {
                 where: {userId: id},
                 // where: {shareAccess: true},
             },
         )
+        if (!user) {
+            return next(ApiError.badRequest('Пользователь не найден'))
+        }
         return res.json(user)
+    }
+
+    async updateUserShareAccess(req, res, next) {
+        const {id, access} = req.params
+        let newAccess = access === 'true' ? false : true
+        try {
+            const user = await UserInfo.update(
+                {
+                    shareAccess: newAccess,
+                }, 
+                {
+                    where: {
+                        userId: id,
+                    }
+                }
+            )
+            return res.json(user)
+        } catch (e) {
+            return next(ApiError.badRequest('Ошибка изменения доступа'))
+        }
+    }
+
+    async updateUserInfo(req, res, next) {
+        const {id, name, lastName, birthday, phone} = req.body.params
+        try {
+            const user = await UserInfo.update(
+                {
+                    name: name,
+                    lastName: lastName,
+                    birthday: birthday,
+                    phoneNumber: phone,
+                }, 
+                {
+                    where: {
+                        userId: id,
+                    }
+                }
+            )
+            return res.json(user)
+        } catch (e) {
+            return next(ApiError.badRequest('Ошибка изменения'))
+        }
     }
 }
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getUserProfileData } from '../http/userAPI';
+import { getUserProfileData, updateUserShareAccess } from '../http/userAPI';
 import { setUserInfo, setUserCertificates } from '../store/UserStore';
 import LoadingSpin from '../components/LoadingSpin/LoadingSpin';
 import { fetchCertificatesByUserId } from '../http/certificateAPI';
@@ -9,6 +9,8 @@ import classes from '../styles/Profile.module.css'
 import Button from '../components/Button/Button';
 import DescriptionLine from '../components/DescriptionLine/DescriptionLine';
 import DescriptionLineEditable from '../components/DescriptionLineEditable/DescriptionLineEditable';
+import Select from '../components/Select/Select';
+import UserInfoModal from '../components/modals/UserInfoModal/UserInfoModal';
 
 const Profile = () => {
     let user = useSelector(state => state.user._user)
@@ -17,6 +19,7 @@ const Profile = () => {
     const dispatch = useDispatch();
     const userDataIsLoading = useRef(true)
     const userCertificatesIsLoading = useRef(true)
+    const [userInfoModalIsActive, setUserInfoModalIsActive] = useState(false)
 
     const getUserInfo = async () => {
         try {
@@ -42,6 +45,25 @@ const Profile = () => {
         }
     }
 
+    const updateShareAccess = async () => {
+        try {
+            let data = await updateUserShareAccess(user.id, userInfo.shareAccess)
+            // dispatch(setUserInfo(data))
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    // const updateUserInfo = async () => {
+    //     try {
+    //         console.log(user.id, userInfo.name, userInfo.lastName, userInfo.birthday, userInfo.phone)
+    //         let data = await updateUserShareAccess(user.id, userInfo.shareAccess)
+    //         // dispatch(setUserInfo(data))
+    //     } catch (e) {
+    //         console.log(e)
+    //     }
+    // }
+
     useEffect(() => {
         getUserInfo();
         getUserCertificates();
@@ -61,21 +83,22 @@ const Profile = () => {
                             className={classes.userImage}
                         />
                     </div>
+                    {userInfoModalIsActive ? <UserInfoModal setModalIsActive={setUserInfoModalIsActive} userInfo={userInfo}/> : ''}
                     <div className={classes.profileData_info}>
                         <DescriptionLine descriptionName='ID пользователя' descriptionData={user.id}/>
                         <DescriptionLine descriptionName='Почта регистрации' descriptionData={user.email}/>
-                        <DescriptionLineEditable
-                            descriptionName='Имя пользователя'
-                            descriptionData={userInfo.name}
-                            edit={<Button title='Изменить' variant='contrast'/>}
-                        />
+                        <DescriptionLine descriptionName='Имя' descriptionData={userInfo.name}/>
+                        <DescriptionLine descriptionName='Фамилия' descriptionData={userInfo.lastName}/>
+                        <DescriptionLine descriptionName='Дата рождения' descriptionData={userInfo.birthday}/>
+                        <DescriptionLine descriptionName='Контактный телефон' descriptionData={userInfo.phoneNumber}/>
                         <DescriptionLineEditable
                             descriptionName='Доступ к просмотру профиля'
-                            descriptionData={userInfo.sharingAccess
+                            descriptionData={userInfo.shareAccess
                                 ?   'Доступно'
                                 :   'Запрещено'}
-                            edit={<Button title='Изменить' variant='contrast'/>}
+                            edit={<Button title={userInfo.shareAccess ? 'Запретить доступ' : 'Разрешить доступ'} variant='contrast' onClick={(e) => updateShareAccess()}/>}
                         />
+                        <Button style={{width: 250}} title='Изменить данные профиля' variant='primary_bg' onClick={(e) => setUserInfoModalIsActive(true)}/>
                     </div>
                 </div>
                 <CreateCertificate/>

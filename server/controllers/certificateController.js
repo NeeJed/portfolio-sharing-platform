@@ -2,6 +2,7 @@ const uuid = require('uuid');
 const path = require('path');
 const {Certificate, CertificateInfo} = require('../models/models');
 const { json } = require('sequelize');
+const ApiError = require('../error/ApiError');
 
 class CertificateController {
     async create(req, res) {
@@ -48,7 +49,7 @@ class CertificateController {
         return res.json(certificates)
     }
 
-    async getOne(req, res) {
+    async getOne(req, res, next) {
         const {id} = req.params
         const certificate = await Certificate.findOne(
             {
@@ -56,10 +57,13 @@ class CertificateController {
                 include: [{model: CertificateInfo, as: 'info'}]
             },
         )
+        if (!certificate) {
+            return next(ApiError.internal(`Сертификат не найден`))
+        }
         return res.json(certificate)
     }
 
-    async getAllByUserId(req, res) {
+    async getAllByUserId(req, res, next) {
         const {id} = req.params
         console.log(id)
         // limit = 6;
@@ -70,6 +74,9 @@ class CertificateController {
                 include: [{model: CertificateInfo, as: 'info'}]
             },
         )
+        if (!certificate) {
+            return next(ApiError.internal(`Сертификаты не найдены`))
+        }
         return res.json(certificate)
     }
 }

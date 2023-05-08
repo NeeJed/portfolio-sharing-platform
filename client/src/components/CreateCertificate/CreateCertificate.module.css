@@ -13,3 +13,14 @@
   max-width: 500px;
   padding: 10px 0;
 }
+
+.createCertificate_imgPreview {
+  display: block;
+}
+
+.createCertificate_imgPreview img {
+  height: 300px;
+  width: 200px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}

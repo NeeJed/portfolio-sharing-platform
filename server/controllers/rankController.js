@@ -13,13 +13,16 @@ class RankController {
         return res.json(ranks)
     }
 
-    async deleteRank(req, res) {
+    async deleteRank(req, res, next) {
         const {rankId} = req.params
         const rank = await Rank.destroy({
             where: {
                 id: rankId
             }
         })
+        if (!rank) {
+            return next(ApiError.internal(`Уровень не найден`))
+        }
         return res.json(rank)
     }
 

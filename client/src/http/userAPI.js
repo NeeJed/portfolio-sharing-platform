@@ -30,3 +30,14 @@ export const getAllUsers = async (categoryId, typeId, rankId, page, limit) => {
     }})
     return data;
 }
+
+export const updateUserShareAccess = async (id, access) => {
+    const {data} = await $host.put(`api/user/userShareAccess${id}/${access}`, {params: {id, access}})
+    return data;
+}
+
+export const updateUserInfo = async (id, name, lastName, birthday, phone) => {
+    console.log(id, name, lastName, birthday, phone)
+    const {data} = await $host.put(`api/user/userInfo` + id, {params: {id, name, lastName, birthday, phone}})
+    return data;
+}

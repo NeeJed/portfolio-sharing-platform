@@ -20,13 +20,25 @@ class TypeController {
         return res.json(types)
     }
 
-    async deleteType(req, res) {
+    async getByCategoryId(req, res) {
+        const {categoryId} = req.params
+        const types = await Type.findAll({where: {categoryId: categoryId}})
+        if (!types) {
+            return next(ApiError.internal(`Типов относящихся к этой категории не существует`))
+        }
+        return res.json(types)
+    }
+
+    async deleteType(req, res, next) {
         const {typeId} = req.params
         const type = await Type.destroy({
             where: {
                 id: typeId
             }
         })
+        if (!type) {
+            return next(ApiError.internal(`Тип не найден`))
+        }
         return res.json(type)
     }
 

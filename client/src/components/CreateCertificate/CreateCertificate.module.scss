@@ -9,4 +9,12 @@
         max-width: 500px;
         padding: 10px 0;
     }
+    &_imgPreview {
+        display: block;
+        img {
+            height: 300px;
+            width: 200px;
+            object-fit: cover;
+        }
+    }
 }

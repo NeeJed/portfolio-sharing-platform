@@ -30,6 +30,11 @@ export const fetchTypes = async () => {
     return {data}
 }
 
+export const fetchTypesByCategoryId = async (categoryId) => {
+    const {data} = await $host.get('api/type/byCategoryId' + categoryId, {categoryId})
+    return {data}
+}
+
 export const createRank = async (rank) => {
     const {data} = await $authHost.post('api/rank', rank)
     return {data}
@@ -56,7 +61,7 @@ export const fetchCertificates = async () => {
 }
 
 export const fetchOneCertificate = async (id) => {
-    const {data} = await $host.get('/api/certificate/', + id)
+    const {data} = await $host.get('/api/certificate/' + id, + id)
     return {data}
 }
 

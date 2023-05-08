@@ -1,15 +1,21 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import classes from './Select.module.css'
 import Button from '../Button/Button'
 
 const Select = ({title, dataList, setValue}) => {
     const [userMenuActive, setUserMenuActive] = useState(false)
-    const [selectTitle, setSelectTitle] = useState('')
+    const [selectTitle, setSelectTitle] = useState(null)
     document.onclick = () => {
         if (userMenuActive) {
             setUserMenuActive(false)
         }
     }
+
+    useEffect(() => {
+        if (selectTitle !== title) {
+            setSelectTitle(title)
+        }
+    }, [dataList])
     
     return (
         <div>

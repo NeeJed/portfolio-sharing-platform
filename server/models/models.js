@@ -14,6 +14,8 @@ const UserInfo = sequelize.define('user_info', {
     lastName: {type: DataTypes.STRING},
     img: {type: DataTypes.STRING, allowNull: false},
     shareAccess: {type: DataTypes.BOOLEAN, defaultValue: false},
+    birthday: {type: DataTypes.DATE},
+    phoneNumber: {type: DataTypes.STRING},
 })
 
 const Certificate = sequelize.define('certificate', {
@@ -48,6 +50,16 @@ const CertificateInfo = sequelize.define('certificate_info', {
     description: {type: DataTypes.STRING},
 })
 
+const Region = sequelize.define('region', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    name: {type: DataTypes.STRING, unique: true},
+})
+
+const City = sequelize.define('city', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    name: {type: DataTypes.STRING, unique: true},
+})
+
 User.hasOne(UserInfo)
 UserInfo.belongsTo(User)
 
@@ -56,6 +68,12 @@ Rating.belongsTo(User)
 
 User.hasMany(Certificate)
 Certificate.belongsTo(User)
+
+Region.hasMany(City)
+City.belongsTo(Region)
+
+UserInfo.hasOne(City)
+City.belongsTo(UserInfo)
 
 Category.hasMany(Type)
 Type.belongsTo(Category)
@@ -81,4 +99,6 @@ module.exports = {
     Rank,
     Rating,
     CertificateInfo,
+    Region,
+    City,
 }

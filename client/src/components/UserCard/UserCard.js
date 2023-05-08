@@ -38,7 +38,7 @@ const UserCard = ({user}) => {
             className={classes.searchResult}
             key={user.id}
         >
-            <Link className={classes.userInfo} to={`${USERPAGE_ROUTE+'/'+user.userId}`}>
+            <Link className={classes.userInfo} to={`${USERPAGE_ROUTE+ '/' + user.userId}`}>
                 <img
                     className={classes.userImg}
                     src={`${process.env.REACT_APP_API_URL}/${user.img}`}

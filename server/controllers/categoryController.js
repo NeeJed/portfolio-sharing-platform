@@ -13,13 +13,16 @@ class CategoryController {
         return res.json(categories)
     }
 
-    async deleteCategory(req, res) {
+    async deleteCategory(req, res, next) {
         const {categoryId} = req.params
         const category = await Category.destroy({
             where: {
                 id: categoryId
             }
         })
+        if (!category) {
+            return next(ApiError.internal(`Категория не найдена`))
+        }
         return res.json(category)
     }
 
