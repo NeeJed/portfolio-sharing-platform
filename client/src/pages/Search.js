@@ -8,13 +8,13 @@ import { setTypes, setRanks, setCategories } from '../store/CertificateStore';
 import { getAllUsers } from '../http/userAPI';
 import { setStudents, setTotalResults, setSelectedCategories, setSelectedTypes, setSelectedRanks } from '../store/StudentsStore';
 import LoadingSpin from '../components/LoadingSpin/LoadingSpin';
-import FilterGroup from '../components/FilterGroup/FilterGroup';
+import Filter from '../components/Filter/Filter';
 import { useNavigate } from 'react-router-dom';
-import { SEARCH_ROUTE, USERPAGE_ROUTE } from '../utils/consts';
 import UserCard from '../components/UserCard/UserCard';
 import ErrorBox from '../components/ErrorBox/ErrorBox'
 import Pages from '../components/Pages/Pages';
-import Checkbox from '../components/Checkbox/Checkbox';
+import FilterGroup from '../components/FilterGroup/FilterGroup';
+import AdminFilterEditing from '../components/AdminFilterEditing/AdminFilterEditing';
 
 const Search = () => {
     const students = useSelector(state => state.students._students)
@@ -32,67 +32,6 @@ const Search = () => {
     const dispatch = useDispatch()
     const [studentsIsLoading, setStudentsIsLoading] = useState(true)
     const [errorMessage, setErrorMessage] = useState('')
-
-    const [category, setCategory] = useState()
-    const addCategory = async () => {
-        let data;
-        try {
-            data = await createCategory({name: category})
-            getCategories()
-        } catch (e) {
-            console.log(e)
-        }
-    }
-
-    const [categoryForType, setCategoryForType] = useState()
-    const [type, setType] = useState()
-    const addType = async () => {
-        let data;
-        try {
-            data = await createType({name: type, categoryId: categoryForType})
-            getTypes()
-        } catch (e) {
-            setErrorMessage(e.response.data.message)
-            console.log(e.response.data.message)
-        }
-    }
-
-    const [rank, setRank] = useState()
-    const addRank = async () => {
-        let data;
-        try {
-            data = await createRank({name: rank})
-            getRanks()
-        } catch (e) {
-            setErrorMessage(e.response.data.message)
-            console.log(e.response.data.message)
-        }
-    }
-
-    const [typeId, setTypeId] = useState()
-    const removeType = async () => {
-        let data;
-        try {
-            data = await deleteType(typeId)
-            console.log(data)
-            getTypes()
-        } catch (e) {
-            setErrorMessage(e.response.data.message)
-            console.log(e.response.data.message)
-        }
-    }
-    const [rankId, setRankId] = useState()
-    const removeRank = async () => {
-        let data;
-        try {
-            data = await deleteRank(rankId)
-            console.log(data)
-            getRanks()
-        } catch (e) {
-            setErrorMessage(e.response.data.message)
-            console.log(e.response.data.message)
-        }
-    }
 
     const getCategories = async () => {
         try {
@@ -165,72 +104,10 @@ const Search = () => {
                     </span>
                 </div>
                 <div className={classes.mainBox_content}>
-
-                    <div className={classes.mainBox_filter}>
-                        <div>
-                            <input
-                                placeholder='категория'
-                                value={category}
-                                onChange={(e) => setCategory(e.target.value)}
-                            />
-                            <button onClick={() => addCategory()}>Добавить</button>
-                        </div>
-                        <div>
-                            <input
-                                placeholder='Категория, к которой относится тип'
-                                value={categoryForType}
-                                onChange={(e) => setCategoryForType(e.target.value)}
-                            />
-                            <input
-                                placeholder='тип'
-                                value={type}
-                                onChange={(e) => setType(e.target.value)}
-                            />
-                            <button onClick={() => addType()}>Добавить</button>
-                        </div>
-                        <div>
-                            <input
-                                placeholder='уровень'
-                                value={rank}
-                                onChange={(e) => setRank(e.target.value)}
-                            />
-                            <button onClick={() => addRank()}>Добавить</button>
-                        </div>
-                        <div>
-                            <input
-                                placeholder='Удалить тип по id'
-                                value={typeId}
-                                onChange={(e) => setTypeId(e.target.value)}
-                            />
-                            <button onClick={() => removeType()}>Удалить</button>
-                        </div>
-                        <div>
-                            <input
-                                placeholder='Удалить уровень по id'
-                                value={rankId}
-                                onChange={(e) => setRankId(e.target.value)}
-                            />
-                            <button onClick={() => removeRank()}>Удалить</button>
-                        </div>
-
-                    </div>
-
+                    {/* <AdminFilterEditing/> */}
                     <aside className={classes.mainBox_filter}>
-                        {
-                            errorMessage !== '' && <ErrorBox errorMessage={errorMessage}/>
-                        }
-                        {/* <FilterGroup dataList={categories} filterData={setSelectedCategories} title='Категория'/> */}
-                        {categories.map(category => 
-                            <div>
-                                <h6>{category.name}</h6>
-                                {types.map(type => type.categoryId === category.id ?
-                                    <Checkbox key={type.id} data={type} filterData={setSelectedTypes}/>
-                                    : false
-                                )}
-                            </div>
-                        )}
-                        {/* <FilterGroup dataList={types} filterData={setSelectedTypes} title='Тип'/> */}
-                        <FilterGroup dataList={ranks} filterData={setSelectedRanks} title='Уровень достижения'/>
+                        <FilterGroup titlesList={categories} dataList={types} filterData={setSelectedTypes}/>
+                        <Filter dataList={ranks} filterData={setSelectedRanks} title='Уровень достижения'/>
                     </aside>
                     <section className={classes.mainBox_searchResults}>
                         {!studentsIsLoading
@@ -239,7 +116,7 @@ const Search = () => {
                             ?
                                 <div>
                                     {students.map(student =>
-                                        <UserCard user={student}/>
+                                        <UserCard key={student.id} user={student}/>
                                     )}
                                 </div>
                             :

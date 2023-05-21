@@ -119,7 +119,7 @@ const Profile = () => {
                     {userCertificates.rows
                     ?
                         userCertificates.rows.map(certificate =>
-                            <div className={classes.certificate}>
+                            <div key={certificate.id} className={classes.certificate}>
                                 <div key={certificate.id}>
                                     {certificate.name}
                                 </div>

@@ -13,12 +13,18 @@ function App() {
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    check().then(data => {
+  const getAuthorizationCheck = async () => {
+    try {
+      const data = await check()
       dispatch(setUser(data))
       dispatch(setIsAuth(true))
+    } finally {
       setLoading(false)
-    }).finally(() => setLoading(false))
+    }
+  } 
+
+  useEffect(() => {
+    getAuthorizationCheck()
   }, [])
 
   if (loading) {
