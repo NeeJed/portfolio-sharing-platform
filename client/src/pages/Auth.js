@@ -49,13 +49,10 @@ const Auth = () => {
                 <h3 className={classes.title}>{isLogin ? 'Авторизация' : 'Регистрация'}</h3>
                 <form className={classes.form}>
                     {
-                        errorMessage !== ''
-                        ?
+                        errorMessage !== '' &&
                         <ErrorBox
                             errorMessage={errorMessage}
                         />
-                        :
-                        <div></div>
                     }
                     <Input
                         type="email"

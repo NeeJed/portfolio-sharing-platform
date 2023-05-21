@@ -5,9 +5,7 @@ import { authRoutes, publicRoutes } from '../routes';
 import {useDispatch, useSelector} from 'react-redux';
 
 const AppRouter = () => {
-    // const dispatch = useDispatch();
     const user = useSelector(state => state.user);
-    // console.log(user._isAuth);
     return (
         <Routes>
             {user._isAuth && authRoutes.map(({path, Component}) => 

@@ -56,8 +56,7 @@ const NavBar = () => {
                                 src={process.env.REACT_APP_API_URL+'/'+user._userInfo.img}
                             />
                         </button>
-                        {userMenuActive
-                        ?
+                        {userMenuActive &&
                             <div className={classes.userMenu} onClick={(e) => e.stopPropagation()}>
                                 <NavLink className={classes.userMenu_button} to={PROFILE_ROUTE}
                                     onClick={() => {
@@ -76,8 +75,6 @@ const NavBar = () => {
                                     title='Выйти'
                                 />
                             </div>
-                        :
-                            <div></div>
                         }
                         
                     </div>

@@ -217,13 +217,7 @@ const Search = () => {
 
                     <aside className={classes.mainBox_filter}>
                         {
-                            errorMessage !== ''
-                            ?
-                            <ErrorBox
-                                errorMessage={errorMessage}
-                            />
-                            :
-                            <div></div>
+                            errorMessage !== '' && <ErrorBox errorMessage={errorMessage}/>
                         }
                         {/* <FilterGroup dataList={categories} filterData={setSelectedCategories} title='Категория'/> */}
                         {categories.map(category => 

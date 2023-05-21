@@ -11,6 +11,7 @@ import DescriptionLine from '../components/DescriptionLine/DescriptionLine';
 import DescriptionLineEditable from '../components/DescriptionLineEditable/DescriptionLineEditable';
 import Select from '../components/Select/Select';
 import UserInfoModal from '../components/modals/UserInfoModal/UserInfoModal';
+import Tooltip from '../components/Tooltip/Tooltip';
 
 const Profile = () => {
     let user = useSelector(state => state.user._user)
@@ -20,6 +21,8 @@ const Profile = () => {
     const userDataIsLoading = useRef(true)
     const userCertificatesIsLoading = useRef(true)
     const [userInfoModalIsActive, setUserInfoModalIsActive] = useState(false)
+    const [changeUserInfoTooltipIsActive, setChangeUserInfoTooltipIsActive] = useState(false)
+    const [changeUserAccessTooltipIsActive, setChangeUserAccessTooltipIsActive] = useState(false)
 
     const getUserInfo = async () => {
         try {
@@ -48,21 +51,12 @@ const Profile = () => {
     const updateShareAccess = async () => {
         try {
             let data = await updateUserShareAccess(user.id, userInfo.shareAccess)
-            // dispatch(setUserInfo(data))
         } catch (e) {
             console.log(e)
+        } finally {
+            setChangeUserAccessTooltipIsActive(true)
         }
     }
-
-    // const updateUserInfo = async () => {
-    //     try {
-    //         console.log(user.id, userInfo.name, userInfo.lastName, userInfo.birthday, userInfo.phone)
-    //         let data = await updateUserShareAccess(user.id, userInfo.shareAccess)
-    //         // dispatch(setUserInfo(data))
-    //     } catch (e) {
-    //         console.log(e)
-    //     }
-    // }
 
     useEffect(() => {
         getUserInfo();
@@ -75,6 +69,25 @@ const Profile = () => {
 
     return (
         <div className={classes.userProfile}>
+            <Tooltip
+                text='Изменение данных прошло успешно'
+                node={document.body}
+                tooltipIsActive={changeUserInfoTooltipIsActive}
+                setTooltipIsActive={setChangeUserInfoTooltipIsActive}
+            />
+            <Tooltip
+                text='Доступ к профилю успешно изменён'
+                node={document.body}
+                tooltipIsActive={changeUserAccessTooltipIsActive}
+                setTooltipIsActive={setChangeUserAccessTooltipIsActive}
+            />
+            {userInfoModalIsActive &&
+                <UserInfoModal
+                    setModalIsActive={setUserInfoModalIsActive}
+                    userInfo={userInfo}
+                    setTooltipIsOpen={setChangeUserInfoTooltipIsActive}
+                />
+            }
             <div className={classes.userProfile_container}>
                 <div className={classes.profileData}>
                     <div className={classes.profileData_image}>
@@ -83,7 +96,6 @@ const Profile = () => {
                             className={classes.userImage}
                         />
                     </div>
-                    {userInfoModalIsActive ? <UserInfoModal setModalIsActive={setUserInfoModalIsActive} userInfo={userInfo}/> : ''}
                     <div className={classes.profileData_info}>
                         <DescriptionLine descriptionName='ID пользователя' descriptionData={user.id}/>
                         <DescriptionLine descriptionName='Почта регистрации' descriptionData={user.email}/>
@@ -96,8 +108,9 @@ const Profile = () => {
                             descriptionData={userInfo.shareAccess
                                 ?   'Доступно'
                                 :   'Запрещено'}
-                            edit={<Button title={userInfo.shareAccess ? 'Запретить доступ' : 'Разрешить доступ'} variant='contrast' onClick={(e) => updateShareAccess()}/>}
-                        />
+                        >
+                            <Button title={userInfo.shareAccess ? 'Запретить доступ' : 'Разрешить доступ'} variant='contrast' onClick={(e) => updateShareAccess()}/>
+                        </DescriptionLineEditable>
                         <Button style={{width: 250}} title='Изменить данные профиля' variant='primary_bg' onClick={(e) => setUserInfoModalIsActive(true)}/>
                     </div>
                 </div>

@@ -4,6 +4,10 @@ const ApiError = require('../error/ApiError');
 class RankController {
     async create(req, res) {
         const {name} = req.body
+        const alreadyExists = await Rank.findOne({where: {name}})
+        if (alreadyExists) {
+            return next(ApiError.badRequest(`Уровень с таким именем уже существует`))
+        }
         const rank = await Rank.create({name})
         return res.json(rank)
     }
