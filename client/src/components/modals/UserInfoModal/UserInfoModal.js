@@ -4,7 +4,7 @@ import Input from '../../Input/Input'
 import Button from '../../Button/Button'
 import { updateUserInfo } from '../../../http/userAPI'
 
-const UserInfoModal = ({setModalIsActive, userInfo}) => {
+const UserInfoModal = ({setModalIsActive, userInfo, setTooltipIsOpen}) => {
     const [userName, setUserName] = useState(userInfo.name)
     const [userLastName, setUserLastName] = useState(userInfo.lastName)
     const [userBirthday, setUserBirthday] = useState(userInfo.birthday)
@@ -18,6 +18,7 @@ const UserInfoModal = ({setModalIsActive, userInfo}) => {
             console.log(e)
         } finally {
             setModalIsActive(false)
+            setTooltipIsOpen(true)
         }
     }
 

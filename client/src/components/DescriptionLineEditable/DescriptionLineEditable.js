@@ -1,7 +1,7 @@
 import React from 'react'
 import classes from './DescriptionLineEditable.module.css'
 
-const DescriptionLineEditable = ({descriptionName, descriptionData, edit}) => {
+const DescriptionLineEditable = ({descriptionName, descriptionData, children}) => {
     return (
         <div className={classes.descriptionBlock}>
             <div className={classes.descriptionBlock_column}>
@@ -11,7 +11,7 @@ const DescriptionLineEditable = ({descriptionName, descriptionData, edit}) => {
                 <div className={classes.descriptionBlock_data}>
                     {descriptionData}
                 </div>
-                {edit}
+                {children}
             </div>
         </div>
     )
