@@ -1,0 +1,91 @@
+.modalWrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(5, 5, 5, 0.4);
+}
+
+.modalWrapper .modalContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 600px;
+  width: 600px;
+  background: #FCFCFC;
+  border-radius: 10px;
+  -webkit-box-shadow: 0px 0px 15px 0px rgba(5, 5, 5, 0.2);
+          box-shadow: 0px 0px 15px 0px rgba(5, 5, 5, 0.2);
+}
+
+.certificate__img {
+  display: block;
+  width: 160px;
+  height: 200px;
+  margin: 5px 0;
+  -webkit-box-shadow: 0px 0px 7px 0px rgba(5, 5, 5, 0.5);
+          box-shadow: 0px 0px 7px 0px rgba(5, 5, 5, 0.5);
+  color: #255C99;
+  cursor: pointer;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.certificate__img:last-child {
+  margin-right: 0;
+}
+
+.description {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  min-height: 30px;
+  width: 80%;
+  overflow-x: hidden;
+}
+
+.description__title {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  padding: 5px 15px;
+}
+
+.info {
+  display: -ms-grid;
+  display: grid;
+  margin-top: 10px;
+  min-height: 30px;
+  width: 80%;
+}
+
+.info__title {
+  color: rgba(5, 5, 5, 0.8);
+}
