@@ -17,6 +17,7 @@ const Button = ({...params}) => {
             className={`${classes.button} ${buttonStyle}`}
             {...params}
         >
+            {params.children}
             {params.title}
         </button>
     )

@@ -1,0 +1,39 @@
+.certificate {
+  display: -ms-grid;
+  display: grid;
+  width: 200px;
+  padding: 10px;
+}
+
+.certificate__img {
+  display: block;
+  width: 160px;
+  height: 200px;
+  margin: 5px 0;
+  margin-right: 15px;
+  -webkit-box-shadow: 0px 0px 7px 0px rgba(5, 5, 5, 0.5);
+          box-shadow: 0px 0px 7px 0px rgba(5, 5, 5, 0.5);
+  color: #255C99;
+  cursor: pointer;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.certificate__img:last-child {
+  margin-right: 0;
+}
+
+.description {
+  display: block;
+  min-height: 30px;
+  overflow-x: hidden;
+}
+
+.info {
+  display: block;
+  min-height: 30px;
+}
+
+.info__title {
+  color: rgba(5, 5, 5, 0.8);
+}

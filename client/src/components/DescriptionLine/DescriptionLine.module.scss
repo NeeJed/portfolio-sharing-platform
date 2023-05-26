@@ -3,11 +3,12 @@
 .descriptionBlock {
     display: grid;
     grid-template-columns: 30% 70%;
-    border-top: 1px solid $dark-gray;
+    border-bottom: 1px solid $dark-gray;
+    border-top: 0;
     padding: 8px 15px;
     background: $white;
     &:last-child {
-        border-bottom: 1px solid $gray;
+        border-bottom: 0;
     }
     &_column {
         display: flex;

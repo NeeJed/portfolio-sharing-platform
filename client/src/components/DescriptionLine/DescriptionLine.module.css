@@ -3,13 +3,14 @@
   display: grid;
   -ms-grid-columns: 30% 70%;
       grid-template-columns: 30% 70%;
-  border-top: 1px solid #e9e9e9;
+  border-bottom: 1px solid #e9e9e9;
+  border-top: 0;
   padding: 8px 15px;
   background: #FCFCFC;
 }
 
 .descriptionBlock:last-child {
-  border-bottom: 1px solid whitesmoke;
+  border-bottom: 0;
 }
 
 .descriptionBlock_column {

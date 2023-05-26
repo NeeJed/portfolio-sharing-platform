@@ -5,6 +5,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { START_ROUTE, SEARCH_ROUTE, PROFILE_ROUTE, AUTH_ROUTE, REGISTRATION_ROUTE } from '../../utils/consts';
 import { setIsAuth, setUser } from '../../store/UserStore';
 import Button from '../Button/Button';
+import Icons from '../Icons/Icons';
 
 const NavBar = () => {
     const user = useSelector(state => state.user)
@@ -65,15 +66,42 @@ const NavBar = () => {
                                         : setUserMenuActive(true)
                                     }}
                                 >
+                                    <Icons
+                                        name='home'
+                                        color='#000'
+                                        size='32'
+                                        className={classes.icon}
+                                    />
                                     Мой профиль
                                 </NavLink>
-                                <Button className={classes.userMenu_button} title='Настройки'/>
-                                <Button className={classes.userMenu_button} title='Сохранить'/>
+                                <Button className={classes.userMenu_button} title='Настройки'>
+                                    <Icons
+                                        name='settings'
+                                        color='#000'
+                                        size='32'
+                                        className={classes.icon}
+                                    />
+                                </Button>
+                                <Button className={classes.userMenu_button} title='Сохранить'>
+                                    <Icons
+                                        name='edit'
+                                        color='#000'
+                                        size='32'
+                                        className={classes.icon}
+                                    />
+                                </Button>
                                 <Button
                                     className={classes.userMenu_button}
                                     onClick={() => logOut()}
                                     title='Выйти'
-                                />
+                                >
+                                    <Icons
+                                        name='close'
+                                        color='#000'
+                                        size='32'
+                                        className={classes.icon}
+                                    />    
+                                </Button>
                             </div>
                         }
                         

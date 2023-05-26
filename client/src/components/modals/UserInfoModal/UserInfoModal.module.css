@@ -17,6 +17,7 @@
 }
 
 .modalWrapper .modalContainer {
+  position: relative;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -36,6 +37,21 @@
   border-radius: 10px;
   -webkit-box-shadow: 0px 0px 15px 0px rgba(5, 5, 5, 0.2);
           box-shadow: 0px 0px 15px 0px rgba(5, 5, 5, 0.2);
+}
+
+.modalWrapper .modalContainer .buttonClose {
+  border-radius: 0 10px 0 0;
+}
+
+.modalWrapper .modalContainer .buttonClose__container {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
+
+.modalWrapper .modalContainer .buttonClose:hover {
+  cursor: pointer;
+  background-color: rgba(5, 5, 5, 0.1);
 }
 
 .modalWrapper .modalContainer .modal_title {

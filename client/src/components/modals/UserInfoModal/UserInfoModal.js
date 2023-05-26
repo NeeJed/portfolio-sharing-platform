@@ -3,6 +3,7 @@ import classes from './UserInfoModal.module.css'
 import Input from '../../Input/Input'
 import Button from '../../Button/Button'
 import { updateUserInfo } from '../../../http/userAPI'
+import Icons from '../../Icons/Icons'
 
 const UserInfoModal = ({setModalIsActive, userInfo, setTooltipIsOpen}) => {
     const [userName, setUserName] = useState(userInfo.name)
@@ -25,6 +26,14 @@ const UserInfoModal = ({setModalIsActive, userInfo, setTooltipIsOpen}) => {
     return (
         <div className={classes.modalWrapper} onClick={(e) => setModalIsActive(false)}>
             <div className={classes.modalContainer} onClick={(e) => e.stopPropagation()}>
+                <div className={classes.buttonClose__container} onClick={() => setModalIsActive(false)}>
+                    <Icons
+                        name='close'
+                        color='#000'
+                        size='64'
+                        className={classes.buttonClose}
+                    />
+                </div>
                 <h4 className={classes.modal_title}>Изменение данных профиля</h4>
                 <div className={classes.modal_userData}>
                     <Input

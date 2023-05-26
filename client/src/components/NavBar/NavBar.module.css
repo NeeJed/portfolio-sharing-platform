@@ -139,6 +139,7 @@
 }
 
 .bar .right .userMenu .userMenu_button {
+  position: relative;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -151,6 +152,8 @@
   width: 200px;
   padding: 5px;
   background: #FCFCFC;
+  color: #050505;
+  text-decoration: none;
 }
 
 .bar .right .userMenu .userMenu_button:hover {
@@ -159,6 +162,17 @@
 
 .bar .right .userMenu .userMenu_button:active {
   background: #e9e9e9;
+}
+
+.bar .right .userMenu .userMenu_button .icon {
+  position: absolute;
+  left: 5px;
+}
+
+.bar .right .userMenu .userMenu_button .icon use {
+  fill: rgba(5, 5, 5, 0.4);
+  color: rgba(5, 5, 5, 0.4);
+  stroke: rgba(5, 5, 5, 0.4);
 }
 
 .bar .right .authBtn {

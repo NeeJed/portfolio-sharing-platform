@@ -85,17 +85,29 @@
             padding: 10px 0;
             box-shadow: 0px 15px 15px 0px rgba($black, 0.2);
             .userMenu_button {
+                position: relative;
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 width: 200px;
                 padding: 5px;
                 background: $white;
+                color: $black;
+                text-decoration: none;
                 &:hover {
                     background: $gray;
                 }
                 &:active {
                     background: $dark-gray;
+                }
+                .icon{
+                    position: absolute;
+                    left: 5px;
+                    use {
+                        fill: rgba($black, 0.4);
+                        color: rgba($black, 0.4);
+                        stroke: rgba($black, 0.4);
+                    }
                 }
             }
         }

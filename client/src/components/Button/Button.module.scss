@@ -1,6 +1,8 @@
 @import '../../utils/colors.scss';
 
 .button {
+    display: flex;
+    align-items: center;
     padding: 5px 10px;
     border-radius: 5px;
     &_primary {

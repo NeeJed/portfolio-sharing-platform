@@ -1,13 +1,20 @@
 import React from 'react'
 import classes from './UserCertificateInfoModal.module.css'
 import DescriptionLine from '../../DescriptionLine/DescriptionLine'
-import Close from '../../../assets/Close/Close'
+import Icons from '../../Icons/Icons'
 
 const UserCertificateInfoModal = ({setModalIsActive, certificate, setTooltipIsOpen}) => {
     return (
         <div className={classes.modalWrapper} onClick={(e) => setModalIsActive(false)}>
             <div className={classes.modalContainer} onClick={(e) => e.stopPropagation()}>
-                <Close style={{backgroundColor: 'red'}}/>
+                <div className={classes.buttonClose__container} onClick={() => setModalIsActive(false)}>
+                    <Icons
+                        name='close'
+                        color='#000'
+                        size='64'
+                        className={classes.buttonClose}
+                    />
+                </div>
                 <img
                     src={process.env.REACT_APP_API_URL + `/` + certificate.img}
                     className={classes.certificate__img}
