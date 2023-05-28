@@ -8,7 +8,7 @@ import Select from '../Select/Select'
 import { setRanks, setTypes, setCategories } from '../../store/CertificateStore'
 import { setUserCertificates } from '../../store/UserStore'
 
-const CreateCertificate = () => {
+const CreateCertificate = ({setModalIsActive}) => {
     let user = useSelector(state => state.user._user)
     const categories = useSelector(state => state.certificate._categories)
     const types = useSelector(state => state.certificate._types)
@@ -116,48 +116,52 @@ const CreateCertificate = () => {
     }, [category])
     
     return (
-        <div className={classes.createCertificate_container}>
-            <Input
-                placeholder='Введите название'
-                type='text'
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-            />
-            <Select dataList={categories} title='Выберите категорию' setValue={setCategory}/>
-            <Select dataList={types} title='Выберите тип' setValue={setType}/>
-            <Select dataList={ranks} title='Выберите уровень' setValue={setRank}/>
-            <input
-                type='file'
-                onChange={selectFile}
-            />
-            <Button
-                onClick={addInfo}
-                title='Добавить описание'
-            />
-            {info.map(i =>
-                <div key={i.number}>
-                    <input
-                        placeholder='Введите название описания'
-                        value={i.title}
-                        onChange={(e) => changeInfo('title', e.target.value, i.number)}
+        <div className={classes.modalWrapper} onClick={(e) => setModalIsActive(false)}>
+            <div className={classes.modalContainer} onClick={(e) => e.stopPropagation()}>
+                <div className={classes.createCertificate_container}>
+                    <Input
+                        placeholder='Введите название'
+                        type='text'
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
                     />
+                    <Select dataList={categories} title='Выберите категорию' setValue={setCategory}/>
+                    <Select dataList={types} title='Выберите тип' setValue={setType}/>
+                    <Select dataList={ranks} title='Выберите уровень' setValue={setRank}/>
                     <input
-                        placeholder='Введите описание'
-                        value={i.description}
-                        onChange={(e) => changeInfo('description', e.target.value, i.number)}
+                        type='file'
+                        onChange={selectFile}
+                    />
+                    <Button
+                        onClick={addInfo}
+                        title='Добавить описание'
+                    />
+                    {info.map(i =>
+                        <div key={i.number}>
+                            <input
+                                placeholder='Введите название описания'
+                                value={i.title}
+                                onChange={(e) => changeInfo('title', e.target.value, i.number)}
+                            />
+                            <input
+                                placeholder='Введите описание'
+                                value={i.description}
+                                onChange={(e) => changeInfo('description', e.target.value, i.number)}
+                            />
+                        </div>
+                    )}
+                    <div className={classes.createCertificate_imgPreview}>
+                        {file ?
+                            <img src={URL.createObjectURL(file)}/>
+                            : 'Предпросмотр'
+                        }
+                    </div>
+                    <Button
+                        onClick={(e) => addCertificate(info)}
+                        title='Добавить достижение'
                     />
                 </div>
-            )}
-            <div className={classes.createCertificate_imgPreview}>
-                {file ?
-                    <img src={URL.createObjectURL(file)}/>
-                    : 'Предпросмотр'
-                }
             </div>
-            <Button
-                onClick={(e) => addCertificate(info)}
-                title='Добавить достижение'
-            />
         </div>
     )
 }

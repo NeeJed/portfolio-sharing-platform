@@ -42,9 +42,6 @@
                     justify-content: space-between;
                     align-items: center;
                 }
-                // &_data {
-                    
-                // }
             }
             &_image {
                 margin: 0 10px;
@@ -57,17 +54,13 @@
             }
         }
         .profileCertificates {
-            display: grid;
-            grid-template-columns: repeat(3, 80px);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: left;
+            align-items: center;
+            // display: grid;
+            // grid-template-columns: repeat(6, 200px);
             border: 1px solid $primary;
-            .certificate {
-                display: grid;
-                width: 100px;
-                &_img {
-                    width: 80px;
-                    height: 100px;
-                }
-            }
         }
     }
 }

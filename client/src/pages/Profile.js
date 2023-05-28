@@ -12,6 +12,8 @@ import DescriptionLineEditable from '../components/DescriptionLineEditable/Descr
 import Select from '../components/Select/Select';
 import UserInfoModal from '../components/modals/UserInfoModal/UserInfoModal';
 import Tooltip from '../components/Tooltip/Tooltip';
+import UserCertificate from '../components/UserCertificate/UserCertificate';
+import Icons from '../components/Icons/Icons';
 
 const Profile = () => {
     let user = useSelector(state => state.user._user)
@@ -111,7 +113,16 @@ const Profile = () => {
                         >
                             <Button title={userInfo.shareAccess ? 'Запретить доступ' : 'Разрешить доступ'} variant='contrast' onClick={(e) => updateShareAccess()}/>
                         </DescriptionLineEditable>
-                        <Button style={{width: 250}} title='Изменить данные профиля' variant='primary_bg' onClick={(e) => setUserInfoModalIsActive(true)}/>
+                        <div>
+                            <Button style={{width: 275}} title='Изменить данные профиля' variant='primary_bg' onClick={(e) => setUserInfoModalIsActive(true)}>
+                                <Icons
+                                    name='edit'
+                                    color='#fff'
+                                    size='32'
+                                    className={classes.buttonEdit}
+                                />
+                            </Button>
+                        </div>
                     </div>
                 </div>
                 <CreateCertificate/>
@@ -119,15 +130,7 @@ const Profile = () => {
                     {userCertificates.rows
                     ?
                         userCertificates.rows.map(certificate =>
-                            <div key={certificate.id} className={classes.certificate}>
-                                <div key={certificate.id}>
-                                    {certificate.name}
-                                </div>
-                                <img
-                                    src={process.env.REACT_APP_API_URL + `/` + certificate.img}
-                                    className={classes.certificate_img}
-                                />
-                            </div> 
+                            <UserCertificate key={certificate.id} certificate={certificate}/>
                         )
                     :
                     <div>Нет достижений</div>}

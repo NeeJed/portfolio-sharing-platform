@@ -12,6 +12,7 @@
   width: 100%;
   max-width: 500px;
   padding: 10px 0;
+  overflow-y: scroll;
 }
 
 .createCertificate_imgPreview {
@@ -23,4 +24,45 @@
   width: 200px;
   -o-object-fit: cover;
      object-fit: cover;
+}
+
+.modalWrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(5, 5, 5, 0.4);
+}
+
+.modalWrapper .modalContainer {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 600px;
+  width: 600px;
+  background: #FCFCFC;
+  border-radius: 10px;
+  -webkit-box-shadow: 0px 0px 15px 0px rgba(5, 5, 5, 0.2);
+          box-shadow: 0px 0px 15px 0px rgba(5, 5, 5, 0.2);
 }
