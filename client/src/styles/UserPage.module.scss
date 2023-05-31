@@ -1,0 +1,65 @@
+@import '../utils/colors.scss';
+
+.userProfile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    min-height: calc(100vh - 50px);
+    background: $light-primary;
+    &_container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        max-width: 1450px;
+        height: 100%;
+        background: $white;
+        .profileData {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 20px;
+            padding: 20px;
+            &_info {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                margin: 0 10px;
+            }
+            .profileItem {
+                display: grid;
+                grid-template-columns: 30% 70%;
+                padding: 8px 15px;
+                background: $white;
+                column-gap: 30px;
+                border-top: 0;
+            }
+            &_image {
+                position: relative;
+                margin: 0 10px;
+                width: 200px;
+                height: 320px;
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+            .userImage {
+                display: block;
+                width: 200px;
+                height: 320px;
+                object-fit: contain;
+            }
+        }
+        .profileCertificates {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            max-width: 1200px;
+            column-gap: 10px;
+            row-gap: 10px;
+        }
+    }
+}
