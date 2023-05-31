@@ -50,6 +50,10 @@
   margin-right: 10px;
 }
 
+.container .searchBox .searchBox_content .buttonSearch {
+  width: 50px;
+}
+
 .container .mainBox {
   display: -webkit-box;
   display: -ms-flexbox;

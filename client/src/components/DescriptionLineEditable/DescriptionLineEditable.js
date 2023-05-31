@@ -1,9 +1,9 @@
 import React from 'react'
 import classes from './DescriptionLineEditable.module.css'
 
-const DescriptionLineEditable = ({descriptionName, descriptionData, children}) => {
+const DescriptionLineEditable = ({descriptionName, descriptionData, className, children}) => {
     return (
-        <div className={classes.descriptionBlock}>
+        <div className={`${classes.descriptionBlock} ${className}`}>
             <div className={classes.descriptionBlock_column}>
                 {descriptionName}
             </div>

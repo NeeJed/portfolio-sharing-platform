@@ -1,4 +1,5 @@
 @import '../utils/colors.scss';
+@import '../utils/screenSizes.scss';
 
 .userProfile {
     display: flex;
@@ -21,46 +22,102 @@
             max-width: 1200px;
             margin-top: 20px;
             padding: 20px;
-            border: 1px solid $black;
+            // border: 1px solid $black;
             &_info {
                 display: flex;
                 flex-direction: column;
                 width: 100%;
                 margin: 0 10px;
+                &__buttons {
+                    margin-bottom: 10px;
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+                }
             }
             .profileItem {
                 display: grid;
                 grid-template-columns: 30% 70%;
-                border-top: 1px solid $dark-gray;
                 padding: 8px 15px;
                 background: $white;
-                &:last-child {
-                    border-bottom: 1px solid $gray;
-                }
-                &_column {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                }
+                column-gap: 30px;
+                border-top: 0;
             }
             &_image {
+                position: relative;
                 margin: 0 10px;
+                width: 200px;
+                height: 320px;
+                &:hover {
+                    cursor: pointer;
+                }
             }
             .userImage {
                 display: block;
                 width: 200px;
                 height: 320px;
-                object-fit: cover;
+                object-fit: contain;
+                &__iconWrapper {
+                    position: absolute;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    top: 0;
+                    left: 0;
+                    width: 200px;
+                    height: 320px;
+                    background-color: rgba($black, 0.2);
+                    &:hover {
+                        cursor: pointer;
+                    }
+                }
+                &__icon {
+                    use {
+                        fill: rgba($black, 0.4);
+                        color: rgba($black, 0.4);
+                        stroke: rgba($black, 0.4);
+                    }
+                }
             }
         }
         .profileCertificates {
             display: flex;
             flex-wrap: wrap;
-            justify-content: left;
+            justify-content: center;
             align-items: center;
-            // display: grid;
-            // grid-template-columns: repeat(6, 200px);
-            border: 1px solid $primary;
+            max-width: 1200px;
+            column-gap: 10px;
+            row-gap: 10px;
+            // border: 1px solid $primary;
         }
+    }
+}
+.userImageIcon-enter {
+    opacity: 0;
+    transform:translateY(3%);
+}
+.userImageIcon-enter-active {
+    opacity: 1;
+    transform:translateY(0);
+    transition: opacity 300ms, transform 300ms;
+}
+.userImageIcon-exit {
+    opacity: 1;
+    transform:translateY(0);
+}
+.userImageIcon-exit-active {
+    opacity: 0;
+    transform:translateY(3%);
+    transition: opacity 300ms, transform 300ms;
+}
+
+@media screen and (max-width: $SCREEN_WIDTH_4) {
+    .userProfile_container .profileData_image {
+        width: 140px;
+        height: 240px;
+    }
+    .userProfile_container .profileData .userImage {
+        width: 140px;
+        height: 240px;
     }
 }

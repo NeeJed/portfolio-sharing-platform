@@ -85,9 +85,8 @@
             padding: 10px 0;
             box-shadow: 0px 15px 15px 0px rgba($black, 0.2);
             .userMenu_button {
-                position: relative;
                 display: flex;
-                justify-content: center;
+                justify-content: left;
                 align-items: center;
                 width: 200px;
                 padding: 5px;
@@ -101,8 +100,7 @@
                     background: $dark-gray;
                 }
                 .icon{
-                    position: absolute;
-                    left: 5px;
+                    margin-right: 10px;
                     use {
                         fill: rgba($black, 0.4);
                         color: rgba($black, 0.4);

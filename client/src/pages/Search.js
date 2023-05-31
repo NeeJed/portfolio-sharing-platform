@@ -15,6 +15,7 @@ import ErrorBox from '../components/ErrorBox/ErrorBox'
 import Pages from '../components/Pages/Pages';
 import FilterGroup from '../components/FilterGroup/FilterGroup';
 import AdminFilterEditing from '../components/AdminFilterEditing/AdminFilterEditing';
+import Icons from '../components/Icons/Icons';
 
 const Search = () => {
     const students = useSelector(state => state.students._students)
@@ -94,7 +95,14 @@ const Search = () => {
             <div className={classes.searchBox}>
                 <div className={classes.searchBox_content}>
                     <Input type='text' placeholder='Найти...'/>
-                    <Button title='Поиск' variant='contrast'/>
+                    <Button title='Поиск' variant='contrast'>
+                        <Icons
+                            name='search'
+                            color='#000'
+                            size='26'
+                            className={classes.searchBox__icon}
+                        />
+                    </Button>
                 </div>
             </div>
             <div className={classes.mainBox}>

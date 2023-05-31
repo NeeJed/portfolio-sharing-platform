@@ -1,8 +1,7 @@
 .certificate {
   display: -ms-grid;
   display: grid;
-  width: 200px;
-  padding: 10px;
+  width: 160px;
 }
 
 .certificate__img {
@@ -20,13 +19,17 @@
 }
 
 .certificate__img:last-child {
-  margin-right: 0;
+  margin-right: 0px;
 }
 
 .description {
   display: block;
   min-height: 30px;
   overflow-x: hidden;
+}
+
+.description__title {
+  white-space: pre;
 }
 
 .info {

@@ -23,10 +23,9 @@ const UserCertificate = ({certificate}) => {
             </Portal>
             }
             <div className={classes.description}>
-                <h5 className={classes.description__title}>
+                <h5 className={classes.description__title} title={certificate.name}>
                     {certificate.name}
                 </h5>
-                <div>{certificate.categoryId}</div>
             </div>
             <img
                 src={process.env.REACT_APP_API_URL + `/` + certificate.img}

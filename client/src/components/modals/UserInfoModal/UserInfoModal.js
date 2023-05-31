@@ -4,12 +4,21 @@ import Input from '../../Input/Input'
 import Button from '../../Button/Button'
 import { updateUserInfo } from '../../../http/userAPI'
 import Icons from '../../Icons/Icons'
+import { CSSTransition } from 'react-transition-group'
 
 const UserInfoModal = ({setModalIsActive, userInfo, setTooltipIsOpen}) => {
     const [userName, setUserName] = useState(userInfo.name)
     const [userLastName, setUserLastName] = useState(userInfo.lastName)
     const [userBirthday, setUserBirthday] = useState(userInfo.birthday)
     const [userPhoneNumber, setUserPhoneNumber] = useState(userInfo.phoneNumber)
+    const [userImageIconIsActive, setUserImageIconIsActive] = useState(false)
+
+    const userImageIconTransitionClasses = {
+        enter: classes['userImageIcon-enter'],
+        enterActive: classes['userImageIcon-enter-active'],
+        exit: classes['userImageIcon-exit'],
+        exitActive: classes['userImageIcon-exit-active'],
+    }
 
     const updateUserInformation = async () => {
         try {
@@ -35,6 +44,26 @@ const UserInfoModal = ({setModalIsActive, userInfo, setTooltipIsOpen}) => {
                     />
                 </div>
                 <h4 className={classes.modal_title}>Изменение данных профиля</h4>
+                <div
+                    className={classes.userImageContainer}
+                    onMouseOver={() => setUserImageIconIsActive(true)}
+                    onMouseLeave={() => setUserImageIconIsActive(false)}
+                >
+                    <CSSTransition in={userImageIconIsActive} timeout={300} classNames={userImageIconTransitionClasses} unmountOnExit>
+                        <div className={classes.userImage__iconWrapper}>
+                            <Icons
+                                name='photo'
+                                color='#000'
+                                size='64'
+                                className={classes.userImage__icon}
+                            />
+                        </div>
+                    </CSSTransition>
+                    <img
+                        src={`${process.env.REACT_APP_API_URL}/${userInfo.img}`}
+                        className={classes.userImage}
+                    />
+                </div>
                 <div className={classes.modal_userData}>
                     <Input
                         placeholder='Имя...'

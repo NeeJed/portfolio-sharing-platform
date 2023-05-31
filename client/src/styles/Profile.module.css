@@ -39,7 +39,6 @@
   max-width: 1200px;
   margin-top: 20px;
   padding: 20px;
-  border: 1px solid #050505;
 }
 
 .userProfile_container .profileData_info {
@@ -54,42 +53,71 @@
   margin: 0 10px;
 }
 
+.userProfile_container .profileData_info__buttons {
+  margin-bottom: 10px;
+}
+
+.userProfile_container .profileData_info__buttons:last-child {
+  margin-bottom: 0;
+}
+
 .userProfile_container .profileData .profileItem {
   display: -ms-grid;
   display: grid;
   -ms-grid-columns: 30% 70%;
       grid-template-columns: 30% 70%;
-  border-top: 1px solid #e9e9e9;
   padding: 8px 15px;
   background: #FCFCFC;
-}
-
-.userProfile_container .profileData .profileItem:last-child {
-  border-bottom: 1px solid whitesmoke;
-}
-
-.userProfile_container .profileData .profileItem_column {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -webkit-column-gap: 30px;
+          column-gap: 30px;
+  border-top: 0;
 }
 
 .userProfile_container .profileData_image {
+  position: relative;
   margin: 0 10px;
+  width: 200px;
+  height: 320px;
+}
+
+.userProfile_container .profileData_image:hover {
+  cursor: pointer;
 }
 
 .userProfile_container .profileData .userImage {
   display: block;
   width: 200px;
   height: 320px;
-  -o-object-fit: cover;
-     object-fit: cover;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+
+.userProfile_container .profileData .userImage__iconWrapper {
+  position: absolute;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  top: 0;
+  left: 0;
+  width: 200px;
+  height: 320px;
+  background-color: rgba(5, 5, 5, 0.2);
+}
+
+.userProfile_container .profileData .userImage__iconWrapper:hover {
+  cursor: pointer;
+}
+
+.userProfile_container .profileData .userImage__icon use {
+  fill: rgba(5, 5, 5, 0.4);
+  color: rgba(5, 5, 5, 0.4);
+  stroke: rgba(5, 5, 5, 0.4);
 }
 
 .userProfile_container .profileCertificates {
@@ -98,11 +126,57 @@
   display: flex;
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
-  -webkit-box-pack: left;
-      -ms-flex-pack: left;
-          justify-content: left;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  border: 1px solid #255C99;
+  max-width: 1200px;
+  -webkit-column-gap: 10px;
+          column-gap: 10px;
+  row-gap: 10px;
+}
+
+.userImageIcon-enter {
+  opacity: 0;
+  -webkit-transform: translateY(3%);
+          transform: translateY(3%);
+}
+
+.userImageIcon-enter-active {
+  opacity: 1;
+  -webkit-transform: translateY(0);
+          transform: translateY(0);
+  -webkit-transition: opacity 300ms, -webkit-transform 300ms;
+  transition: opacity 300ms, -webkit-transform 300ms;
+  transition: opacity 300ms, transform 300ms;
+  transition: opacity 300ms, transform 300ms, -webkit-transform 300ms;
+}
+
+.userImageIcon-exit {
+  opacity: 1;
+  -webkit-transform: translateY(0);
+          transform: translateY(0);
+}
+
+.userImageIcon-exit-active {
+  opacity: 0;
+  -webkit-transform: translateY(3%);
+          transform: translateY(3%);
+  -webkit-transition: opacity 300ms, -webkit-transform 300ms;
+  transition: opacity 300ms, -webkit-transform 300ms;
+  transition: opacity 300ms, transform 300ms;
+  transition: opacity 300ms, transform 300ms, -webkit-transform 300ms;
+}
+
+@media screen and (max-width: 900px) {
+  .userProfile_container .profileData_image {
+    width: 140px;
+    height: 240px;
+  }
+  .userProfile_container .profileData .userImage {
+    width: 140px;
+    height: 240px;
+  }
 }

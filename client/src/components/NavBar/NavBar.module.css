@@ -139,13 +139,12 @@
 }
 
 .bar .right .userMenu .userMenu_button {
-  position: relative;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -webkit-box-pack: left;
+      -ms-flex-pack: left;
+          justify-content: left;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
@@ -165,8 +164,7 @@
 }
 
 .bar .right .userMenu .userMenu_button .icon {
-  position: absolute;
-  left: 5px;
+  margin-right: 10px;
 }
 
 .bar .right .userMenu .userMenu_button .icon use {

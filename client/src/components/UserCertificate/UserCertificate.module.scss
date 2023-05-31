@@ -2,8 +2,7 @@
 
 .certificate {
     display: grid;
-    width: 200px;
-    padding: 10px;
+    width: 160px;
     &__img {
         display: block;
         width: 160px;
@@ -15,7 +14,7 @@
         cursor: pointer;
         object-fit: cover;
         &:last-child {
-            margin-right: 0;
+            margin-right: 0px;
         }
     }
 }
@@ -24,7 +23,7 @@
     min-height: 30px;
     overflow-x:hidden;
     &__title {
-        
+        white-space: pre;
     }
 }
 .info {

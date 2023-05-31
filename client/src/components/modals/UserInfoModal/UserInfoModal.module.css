@@ -55,7 +55,7 @@
 }
 
 .modalWrapper .modalContainer .modal_title {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .modalWrapper .modalContainer .modal_userData {
@@ -83,4 +83,77 @@
 
 .modalWrapper .modalContainer .modal_userData *:last-child {
   margin-bottom: 0;
+}
+
+.userImageContainer {
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.userImage {
+  display: block;
+  width: 100px;
+  height: 100px;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+
+.userImage__iconWrapper {
+  position: absolute;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  top: 0;
+  left: 0;
+  width: 100px;
+  height: 100px;
+  background-color: rgba(5, 5, 5, 0.2);
+}
+
+.userImage__iconWrapper:hover {
+  cursor: pointer;
+}
+
+.userImage__icon use {
+  fill: rgba(5, 5, 5, 0.4);
+  color: rgba(5, 5, 5, 0.4);
+  stroke: rgba(5, 5, 5, 0.4);
+}
+
+.userImageIcon-enter {
+  opacity: 0;
+  -webkit-transform: translateY(3%);
+          transform: translateY(3%);
+}
+
+.userImageIcon-enter-active {
+  opacity: 1;
+  -webkit-transform: translateY(0);
+          transform: translateY(0);
+  -webkit-transition: opacity 300ms, -webkit-transform 300ms;
+  transition: opacity 300ms, -webkit-transform 300ms;
+  transition: opacity 300ms, transform 300ms;
+  transition: opacity 300ms, transform 300ms, -webkit-transform 300ms;
+}
+
+.userImageIcon-exit {
+  opacity: 1;
+  -webkit-transform: translateY(0);
+          transform: translateY(0);
+}
+
+.userImageIcon-exit-active {
+  opacity: 0;
+  -webkit-transform: translateY(3%);
+          transform: translateY(3%);
+  -webkit-transition: opacity 300ms, -webkit-transform 300ms;
+  transition: opacity 300ms, -webkit-transform 300ms;
+  transition: opacity 300ms, transform 300ms;
+  transition: opacity 300ms, transform 300ms, -webkit-transform 300ms;
 }

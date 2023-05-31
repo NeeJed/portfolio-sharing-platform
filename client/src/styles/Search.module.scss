@@ -14,17 +14,22 @@
         height: 80px;
         width: 100%;
         background: $light-primary;
-        .searchBox_content {
-            display: flex;
-            align-items: center;
-            justify-content: start;
-            width: 100%;
-            max-width: 1400px;
-            margin: 0 30px;
-            input {
+        .searchBox {
+            &_content {
+                display: flex;
+                align-items: center;
+                justify-content: start;
                 width: 100%;
-                max-width: 500px;
-                margin-right: 10px;
+                max-width: 1400px;
+                margin: 0 30px;
+                input {
+                    width: 100%;
+                    max-width: 500px;
+                    margin-right: 10px;
+                }
+                .buttonSearch {
+                    width: 50px;
+                }
             }
         }
     }
