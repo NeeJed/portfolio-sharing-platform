@@ -79,6 +79,58 @@ class CertificateController {
         }
         return res.json(certificate)
     }
+
+    async update(req, res, next) {
+        console.log(req.body)
+        console.log(req.files)
+        const {id, name, categoryId, typeId, rankId, userId, info} = req.body
+        const {img} = req.files
+        let fileName = uuid.v4() + ".jpg"
+        img.mv(path.resolve(__dirname, '..', 'static', fileName))
+
+        console.log({name, categoryId, typeId, rankId, userId, img: fileName})
+        try {
+            const certificate = await Certificate.update(
+                {
+                    name: name, 
+                    categoryId: categoryId, 
+                    typeId: typeId, 
+                    rankId: rankId,
+                    img: fileName
+                },
+                {
+                    where: {
+                        id: id,
+                    }
+                }
+            )
+            if(info) {
+                let information = JSON.parse(info)
+                information.map(i => 
+                    CertificateInfo.update({
+                        title: i.title,
+                        description: i.description,
+                    })
+                )
+            }
+            return res.json(certificate)
+        } catch (e) {
+            return next(ApiError.badRequest('Ошибка изменения'))
+        }
+    }
+
+    async delete(req, res, next) {
+        const {id} = req.params
+        const certificate = await Certificate.destroy({
+            where: {
+                id: id
+            }
+        })
+        if (!certificate) {
+            return next(ApiError.internal(`Сертификат не найден`))
+        }
+        return res.json(certificate)
+    }
 }
 
 module.exports = new CertificateController()

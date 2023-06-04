@@ -84,3 +84,23 @@
   -webkit-box-shadow: 0px 3px 0px inset #FCFCFC;
           box-shadow: 0px 3px 0px inset #FCFCFC;
 }
+
+.button_error {
+  color: #FCFCFC;
+  background: #E9190F;
+  border: 1px solid #E9190F;
+}
+
+.button_error:hover {
+  border-color: #6B0504;
+  background: #E9190F;
+  color: #FCFCFC;
+}
+
+.button_error:active {
+  border-color: #6B0504;
+  color: #FCFCFC;
+  background: #E9190F;
+  -webkit-box-shadow: 0px 3px 0px inset #6B0504;
+          box-shadow: 0px 3px 0px inset #6B0504;
+}

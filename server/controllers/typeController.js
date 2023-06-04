@@ -20,6 +20,19 @@ class TypeController {
         return res.json(types)
     }
 
+    async getOneById(req, res, next) {
+        const {id} = req.params
+        const type = await Type.findOne(
+            {
+                where: {id},
+            },
+        )
+        if (!type) {
+            return next(ApiError.badRequest('Тип не найден'))
+        }
+        return res.json(type)
+    }
+
     async getByCategoryId(req, res) {
         const {categoryId} = req.params
         const types = await Type.findAll({where: {categoryId: categoryId}})

@@ -1,10 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import classes from './UserInfoModal.module.css'
 import Input from '../../Input/Input'
 import Button from '../../Button/Button'
 import { updateUserInfo } from '../../../http/userAPI'
 import Icons from '../../Icons/Icons'
 import { CSSTransition } from 'react-transition-group'
+import { fetchRegions, fetchCitiesByRegionId } from '../../../http/locationAPI'
+import { setRegions, setCities } from '../../../store/LocationStore'
+import { useDispatch, useSelector } from 'react-redux'
+import Select from '../../Select/Select'
 
 const UserInfoModal = ({setModalIsActive, userInfo, setTooltipIsOpen}) => {
     const [userName, setUserName] = useState(userInfo.name)
@@ -12,6 +16,13 @@ const UserInfoModal = ({setModalIsActive, userInfo, setTooltipIsOpen}) => {
     const [userBirthday, setUserBirthday] = useState(userInfo.birthday)
     const [userPhoneNumber, setUserPhoneNumber] = useState(userInfo.phoneNumber)
     const [userImageIconIsActive, setUserImageIconIsActive] = useState(false)
+    const [region, setRegion] = useState(null)
+    const [city, setCity] = useState(null)
+
+    const regions = useSelector(state => state.location.regions)
+    const cities = useSelector(state => state.location.cities)
+
+    const dispatch = useDispatch()
 
     const userImageIconTransitionClasses = {
         enter: classes['userImageIcon-enter'],
@@ -22,8 +33,8 @@ const UserInfoModal = ({setModalIsActive, userInfo, setTooltipIsOpen}) => {
 
     const updateUserInformation = async () => {
         try {
-            console.log(userInfo.userId, userName, userLastName, userBirthday, userPhoneNumber)
-            let data = await updateUserInfo(userInfo.userId, userName, userLastName, userBirthday, userPhoneNumber)
+            console.log(userInfo.userId, userName, userLastName, userBirthday, userPhoneNumber, city)
+            let data = await updateUserInfo(userInfo.userId, userName, userLastName, userBirthday, userPhoneNumber, city)
         } catch (e) {
             console.log(e)
         } finally {
@@ -31,6 +42,37 @@ const UserInfoModal = ({setModalIsActive, userInfo, setTooltipIsOpen}) => {
             setTooltipIsOpen(true)
         }
     }
+
+    const getRegions = async () => {
+        try {
+            let {data} = await fetchRegions()
+            dispatch(setRegions(data))
+            console.log('регионы: ', data)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+    const getCities = async (regionId) => {
+        try {
+            let {data} = await fetchCitiesByRegionId(regionId)
+            dispatch(setCities(data))
+            setCity(null)
+            console.log('города: ', data)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    useEffect(() => {
+        getRegions()
+    }, [])
+
+    useEffect(() => {
+        if (region) {
+            getCities(region)
+            console.log(region)
+        }
+    }, [region])
 
     return (
         <div className={classes.modalWrapper} onClick={(e) => setModalIsActive(false)}>
@@ -89,6 +131,8 @@ const UserInfoModal = ({setModalIsActive, userInfo, setTooltipIsOpen}) => {
                         value={userPhoneNumber}
                         onChange={(e) => setUserPhoneNumber(e.target.value)}
                     />
+                    <Select dataList={regions} title='Выберите регион' setValue={setRegion}/>
+                    <Select dataList={cities} title='Выберите город' setValue={setCity}/>
                     
                 </div>
                 <Button title='Подтвердить' variant='primary_bg' onClick={(e) => updateUserInformation()}/>

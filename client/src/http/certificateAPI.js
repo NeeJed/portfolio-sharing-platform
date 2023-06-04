@@ -15,6 +15,12 @@ export const fetchCategories = async () => {
     return {data}
 }
 
+export const fetchOneCategory = async (categoryId) => {
+    console.log(categoryId)
+    const {data} = await $host.get('api/category/getOneById' + categoryId, {categoryId})
+    return {data}
+}
+
 export const createType = async ({name, categoryId}) => {
     const {data} = await $authHost.post('api/type', {name, categoryId} )
     return {data}
@@ -27,6 +33,11 @@ export const deleteType = async (typeId) => {
 
 export const fetchTypes = async () => {
     const {data} = await $host.get('api/type',)
+    return {data}
+}
+
+export const fetchOneType = async (typeId) => {
+    const {data} = await $host.get('api/type/getOneById' + typeId, {typeId})
     return {data}
 }
 
@@ -50,6 +61,11 @@ export const fetchRanks = async () => {
     return {data}
 }
 
+export const fetchOneRank = async (rankId) => {
+    const {data} = await $host.get('api/rank/getOneById' + rankId, {rankId})
+    return {data}
+}
+
 export const createCertificate = async (certificate) => {
     const {data} = await $authHost.post('api/certificate', certificate)
     return {data}
@@ -67,5 +83,16 @@ export const fetchOneCertificate = async (id) => {
 
 export const fetchCertificatesByUserId = async (id) => {
     const {data} = await $host.get('/api/certificate/user/' + id, {id})
+    return {data}
+}
+
+export const updateCertificate = async (certificate) => {
+    const {data} = await $authHost.put('/api/certificate/update', certificate)
+    return {data}
+}
+
+export const deleteCertificate = async (id) => {
+    console.log(id)
+    const {data} = await $authHost.delete('/api/certificate/delete' + id, id)
     return {data}
 }

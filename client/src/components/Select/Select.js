@@ -18,7 +18,7 @@ const Select = ({title, dataList, setValue}) => {
     }, [dataList])
     
     return (
-        <div>
+        <div className={classes.select}>
             <Button className={classes.userInfo}
                     title={selectTitle || title}
                     onClick={(e) => {
@@ -28,8 +28,7 @@ const Select = ({title, dataList, setValue}) => {
                         : setUserMenuActive(true)
                     }}
             />
-            {userMenuActive
-            ?
+            {userMenuActive &&
                 <div className={classes.userMenu} onClick={(e) => e.stopPropagation()}>
                     {dataList.map(elem => 
                         <Button
@@ -47,8 +46,6 @@ const Select = ({title, dataList, setValue}) => {
                         />
                     )}
                 </div>
-            :
-                <div></div>
             }
         </div>
     )

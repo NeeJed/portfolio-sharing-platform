@@ -17,7 +17,7 @@ import UserCertificate from '../components/UserCertificate/UserCertificate';
 import Icons from '../components/Icons/Icons';
 import Portal from '../components/Portal/Portal';
 import { CSSTransition } from 'react-transition-group';
-import screenSizes, { SCREEN_WIDTH_4 } from '../utils/screenSizes';
+import  { SCREEN_WIDTH_4 } from '../utils/constBreakpoints';
 
 const UserPage = () => {
     const [userInfo, setUserInfo] = useState({})

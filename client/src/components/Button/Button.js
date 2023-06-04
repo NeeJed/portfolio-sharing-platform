@@ -9,6 +9,8 @@ const Button = ({...params}) => {
         buttonStyle = `${classes.button_primary_bg}`;
     } else if (params.variant === 'contrast') {
         buttonStyle = `${classes.button_contrast}`;
+    } else if (params.variant === 'error') {
+        buttonStyle = `${classes.button_error}`;
     } else {
         buttonStyle = `${classes.button_primary}`;
     }

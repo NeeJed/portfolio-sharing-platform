@@ -28,6 +28,7 @@ class UserController {
         await UserInfo.create({
             img: 'defaultUserImage.jpg',
             userId: user.id,
+            name: user.email,
         })
         return res.json({token})
     }
@@ -85,7 +86,7 @@ class UserController {
         let suitableUsers = []
         certificates.map(certificate => suitableUsers.push(certificate.dataValues.userId))
         suitableUsers = Array.from(new Set(suitableUsers))
-        users = await UserInfo.findAndCountAll({where: {shareAccess: false, userId: suitableUsers}, limit, offset})
+        users = await UserInfo.findAndCountAll({where: {shareAccess: true, userId: suitableUsers}, limit, offset})
         return res.json(users)
     }
 
@@ -138,7 +139,8 @@ class UserController {
     }
 
     async updateUserInfo(req, res, next) {
-        const {id, name, lastName, birthday, phone} = req.body.params
+        const {id, name, lastName, birthday, phone, city} = req.body.params
+        console.log(city)
         try {
             const user = await UserInfo.update(
                 {
@@ -146,6 +148,7 @@ class UserController {
                     lastName: lastName,
                     birthday: birthday,
                     phoneNumber: phone,
+                    cityId: city,
                 }, 
                 {
                     where: {

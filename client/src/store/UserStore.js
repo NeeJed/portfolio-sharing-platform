@@ -6,6 +6,8 @@ const UserStore = createSlice({
         _isAuth: false,
         _user: {},
         _userInfo: {},
+        _userCity: '',
+        _userRegion: '',
         _userCertificates: [],
     },
     reducers: {
@@ -21,9 +23,15 @@ const UserStore = createSlice({
         setUserCertificates(state, action) {
             state._userCertificates = action.payload;
         },
+        setUserCity(state, action) {
+            state._userCity = action.payload;
+        },
+        setUserRegion(state, action) {
+            state._userRegion = action.payload;
+        },
     },
 });
 
-export const {setIsAuth, setUser, setUserInfo, setUserCertificates} = UserStore.actions;
+export const {setIsAuth, setUser, setUserInfo, setUserCertificates, setUserCity, setUserRegion} = UserStore.actions;
 
 export default UserStore.reducer;

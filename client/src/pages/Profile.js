@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getUserProfileData, updateUserShareAccess } from '../http/userAPI';
-import { setUserInfo, setUserCertificates } from '../store/UserStore';
+import { setUserInfo, setUserCertificates, setUserCity, setUserRegion } from '../store/UserStore';
 import LoadingSpin from '../components/LoadingSpin/LoadingSpin';
-import { fetchCertificatesByUserId } from '../http/certificateAPI';
+import { fetchCertificatesByUserId, fetchTypes, fetchCategories, fetchRanks } from '../http/certificateAPI';
 import CreateCertificate from '../components/CreateCertificate/CreateCertificate';
 import classes from '../styles/Profile.module.css'
 import Button from '../components/Button/Button';
@@ -16,26 +16,59 @@ import UserCertificate from '../components/UserCertificate/UserCertificate';
 import Icons from '../components/Icons/Icons';
 import Portal from '../components/Portal/Portal';
 import { CSSTransition } from 'react-transition-group';
-import { SCREEN_WIDTH_4 } from '../utils/screenSizes';
+import { SCREEN_WIDTH_4, SCREEN_WIDTH_3 } from '../utils/constBreakpoints';
+import { setCategories, setTypes, setRanks } from '../store/CertificateStore';
+import { fetchOneCity } from '../http/locationAPI';
 
 const Profile = () => {
     let user = useSelector(state => state.user._user)
     let userInfo = useSelector(state => state.user._userInfo)
     let userCertificates = useSelector(state => state.user._userCertificates)
+    let userCity = useSelector(state => state.user._userCity)
     const dispatch = useDispatch();
     const userDataIsLoading = useRef(true)
     const userCertificatesIsLoading = useRef(true)
     const [userInfoModalIsActive, setUserInfoModalIsActive] = useState(false)
     const [changeUserInfoTooltipIsActive, setChangeUserInfoTooltipIsActive] = useState(false)
     const [changeUserAccessTooltipIsActive, setChangeUserAccessTooltipIsActive] = useState(false)
+    const [addCertificateTooltipIsActive, setAddCertificateTooltipIsActive] = useState(false)
     const [userImageIconIsActive, setUserImageIconIsActive] = useState(false)
     const [createCertificateModalIsActive, setCreateCertificateModalIsActive] = useState(false)
+
+    const categories = useSelector(state => state.certificate._categories)
+    const types = useSelector(state => state.certificate._types)
+    const ranks = useSelector(state => state.certificate._ranks)
 
     const userImageIconTransitionClasses = {
         enter: classes['userImageIcon-enter'],
         enterActive: classes['userImageIcon-enter-active'],
         exit: classes['userImageIcon-exit'],
         exitActive: classes['userImageIcon-exit-active'],
+    }
+
+    const getCategories = async () => {
+        try {
+            let {data} = await fetchCategories()
+            dispatch(setCategories(data))
+        } catch (e) {
+            console.log(e)
+        }
+    }
+    const getTypes = async () => {
+        try {
+            let {data} = await fetchTypes()
+            dispatch(setTypes(data))
+        } catch (e) {
+            console.log(e)
+        }
+    }
+    const getRanks = async () => {
+        try {
+            let {data} = await fetchRanks()
+            dispatch(setRanks(data))
+        } catch (e) {
+            console.log(e)
+        }
     }
 
     const getUserInfo = async () => {
@@ -47,6 +80,17 @@ const Profile = () => {
             console.log(e)
         } finally {
             userDataIsLoading.current = false
+        }
+    }
+    const getUserCity = async () => {
+        try {
+            let data = await fetchOneCity(userInfo.cityId)
+            console.log(data.name)
+            dispatch(setUserCity(data.name))
+        } catch (e) {
+            console.log(e)
+        } finally {
+            console.log(userCity)
         }
     }
     
@@ -75,7 +119,20 @@ const Profile = () => {
     useEffect(() => {
         getUserInfo();
         getUserCertificates();
+        if (!categories.length) {
+            getCategories()
+        }
+        if (!types.length) {
+            getTypes()
+        }
+        if (!ranks.length) {
+            getRanks()
+        }
     }, [])
+
+    useEffect(() => {
+        getUserCity()
+    }, [userInfo.cityId])
 
     if (userDataIsLoading.current) {
         return <LoadingSpin type='component'/>
@@ -94,6 +151,12 @@ const Profile = () => {
                 node={document.body}
                 tooltipIsActive={changeUserAccessTooltipIsActive}
                 setTooltipIsActive={setChangeUserAccessTooltipIsActive}
+            />
+            <Tooltip
+                text='Сертификат успешно добавлен'
+                node={document.body}
+                tooltipIsActive={addCertificateTooltipIsActive}
+                setTooltipIsActive={setAddCertificateTooltipIsActive}
             />
             {userInfoModalIsActive &&
                 <Portal>
@@ -133,6 +196,7 @@ const Profile = () => {
                         <DescriptionLine descriptionName='Имя' descriptionData={userInfo.name} className={classes.profileItem}/>
                         <DescriptionLine descriptionName='Фамилия' descriptionData={userInfo.lastName} className={classes.profileItem}/>
                         <DescriptionLine descriptionName='Дата рождения' descriptionData={userInfo.birthday} className={classes.profileItem}/>
+                        <DescriptionLine descriptionName='Город' descriptionData={userCity} className={classes.profileItem}/>
                         <DescriptionLine descriptionName='Контактный телефон' descriptionData={userInfo.phoneNumber} className={classes.profileItem}/>
                         <DescriptionLineEditable
                             descriptionName='Доступ к просмотру профиля'
@@ -145,7 +209,7 @@ const Profile = () => {
                         </DescriptionLineEditable>
                         <div className={classes.profileData_info__buttons}>
                             <Button
-                                title={window.innerWidth > SCREEN_WIDTH_4 ? 'Изменить данные профиля' : 'Изменить'}
+                                title={window.innerWidth > SCREEN_WIDTH_3 ? 'Изменить данные профиля' : 'Изменить'}
                                 variant='primary_bg'
                                 onClick={(e) => setUserInfoModalIsActive(true)}>
                                 <Icons
@@ -155,10 +219,8 @@ const Profile = () => {
                                     className={classes.buttonEdit}
                                 />
                             </Button>
-                        </div>
-                        <div className={classes.profileData_info__buttons}>
                             <Button
-                                title={window.innerWidth > SCREEN_WIDTH_4 ? 'Добавить новый сертификат' : 'Добавить'}
+                                title={window.innerWidth > SCREEN_WIDTH_3 ? 'Добавить новый сертификат' : 'Добавить'}
                                 variant='primary_bg'
                                 onClick={(e) => setCreateCertificateModalIsActive(true)}
                             >
@@ -174,7 +236,7 @@ const Profile = () => {
                 </div>
                 {createCertificateModalIsActive &&
                     <Portal>
-                        <CreateCertificate setModalIsActive={setCreateCertificateModalIsActive}/>
+                        <CreateCertificate setModalIsActive={setCreateCertificateModalIsActive} setTooltipIsOpen={setAddCertificateTooltipIsActive}/>
                     </Portal>
                 }
                 <div className={classes.profileCertificates}>

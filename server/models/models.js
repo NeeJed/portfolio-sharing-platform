@@ -57,7 +57,7 @@ const Region = sequelize.define('region', {
 
 const City = sequelize.define('city', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    name: {type: DataTypes.STRING, unique: true},
+    name: {type: DataTypes.STRING},
 })
 
 User.hasOne(UserInfo)
@@ -72,8 +72,8 @@ Certificate.belongsTo(User)
 Region.hasMany(City)
 City.belongsTo(Region)
 
-UserInfo.hasOne(City)
-City.belongsTo(UserInfo)
+City.hasMany(UserInfo)
+UserInfo.belongsTo(City)
 
 Category.hasMany(Type)
 Type.belongsTo(Category)

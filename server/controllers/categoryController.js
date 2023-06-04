@@ -17,6 +17,19 @@ class CategoryController {
         return res.json(categories)
     }
 
+    async getOneById(req, res, next) {
+        const {id} = req.params
+        const category = await Category.findOne(
+            {
+                where: {id},
+            },
+        )
+        if (!category) {
+            return next(ApiError.badRequest('Категория не найдена'))
+        }
+        return res.json(category)
+    }
+
     async deleteCategory(req, res, next) {
         const {categoryId} = req.params
         const category = await Category.destroy({

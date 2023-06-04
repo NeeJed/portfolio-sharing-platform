@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import Input from '../Input/Input'
-import { createCertificate, fetchRanks, fetchTypes, fetchCategories, fetchTypesByCategoryId, fetchCertificatesByUserId } from '../../http/certificateAPI'
+import { createCertificate, fetchRanks, fetchTypes, fetchCategories, fetchTypesByCategoryId, fetchCertificatesByUserId, updateCertificate } from '../../http/certificateAPI'
 import Button from '../Button/Button'
 import classes from './CreateCertificate.module.css'
 import Select from '../Select/Select'
 import { setRanks, setTypes, setCategories } from '../../store/CertificateStore'
 import { setUserCertificates } from '../../store/UserStore'
 
-const CreateCertificate = ({setModalIsActive}) => {
+const CreateCertificate = ({setModalIsActive, setTooltipIsOpen, isEdit = false, certificate}) => {
     let user = useSelector(state => state.user._user)
     const categories = useSelector(state => state.certificate._categories)
     const types = useSelector(state => state.certificate._types)
@@ -20,12 +20,12 @@ const CreateCertificate = ({setModalIsActive}) => {
     const [type, setType] = useState(null)
     const [rank, setRank] = useState(null)
     const [info, setInfo] = useState([])
+    const inputFileRef = useRef()
 
     const dispatch = useDispatch()
 
     const selectFile = e => {
         setFile(e.target.files[0])
-        console.log(e.target.files[0])
     }
 
     const addInfo = () => {
@@ -41,6 +41,7 @@ const CreateCertificate = ({setModalIsActive}) => {
 
     const addCertificate = () => {
         const formData = new FormData()
+        if (isEdit) formData.append('id', certificate.id);
         formData.append('name', name)
         formData.append('categoryId', category)
         formData.append('typeId', type)
@@ -49,18 +50,24 @@ const CreateCertificate = ({setModalIsActive}) => {
         formData.append('img', file)
         formData.append('info', JSON.stringify(info))
         try {
-            createCertificate(formData)
+            isEdit
+            ?
+                updateCertificate(formData)
+            :
+                createCertificate(formData)
         } catch (e) {
             console.log(e.response.message)
         } finally {
-            alert('добавлено')
             setName('')
             setFile()
+            inputFileRef.current.value = ''
             setCategory(null)
             setType(null)
             setRank(null)
             setInfo([])
             getUserCertificates()
+            setTooltipIsOpen(true)
+            console.log('Сертификат добавлен')
         }
     }
 
@@ -119,6 +126,7 @@ const CreateCertificate = ({setModalIsActive}) => {
         <div className={classes.modalWrapper} onClick={(e) => setModalIsActive(false)}>
             <div className={classes.modalContainer} onClick={(e) => e.stopPropagation()}>
                 <div className={classes.createCertificate_container}>
+                    <h5>{isEdit ? 'Изменить сертификат' : 'Добавить сертификат'}</h5>
                     <Input
                         placeholder='Введите название'
                         type='text'
@@ -129,6 +137,7 @@ const CreateCertificate = ({setModalIsActive}) => {
                     <Select dataList={types} title='Выберите тип' setValue={setType}/>
                     <Select dataList={ranks} title='Выберите уровень' setValue={setRank}/>
                     <input
+                        ref={inputFileRef}
                         type='file'
                         onChange={selectFile}
                     />
