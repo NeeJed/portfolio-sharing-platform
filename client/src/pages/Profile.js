@@ -139,7 +139,7 @@ const Profile = () => {
     }
 
     return (
-        <div className={classes.userProfile}>
+        <div className={classes.userProfile} style={{minHeight: window.innerHeight - 50}}>
             <Tooltip
                 text='Изменение данных прошло успешно'
                 node={document.body}

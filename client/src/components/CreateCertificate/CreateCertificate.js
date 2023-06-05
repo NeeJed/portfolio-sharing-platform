@@ -14,7 +14,7 @@ const CreateCertificate = ({setModalIsActive, setTooltipIsOpen, isEdit = false, 
     const types = useSelector(state => state.certificate._types)
     const ranks = useSelector(state => state.certificate._ranks)
 
-    const [name, setName] = useState('')
+    const [name, setName] = useState()
     const [file, setFile] = useState()
     const [category, setCategory] = useState(null)
     const [type, setType] = useState(null)
@@ -47,6 +47,7 @@ const CreateCertificate = ({setModalIsActive, setTooltipIsOpen, isEdit = false, 
         formData.append('typeId', type)
         formData.append('rankId', rank)
         formData.append('userId', user.id)
+        if (isEdit) formData.append('imgURL', certificate.img)
         formData.append('img', file)
         formData.append('info', JSON.stringify(info))
         try {
@@ -84,7 +85,9 @@ const CreateCertificate = ({setModalIsActive, setTooltipIsOpen, isEdit = false, 
         try {
             let {data} = await fetchTypesByCategoryId(categoryId)
             dispatch(setTypes(data))
-            setType(null)
+            if (!isEdit) {
+                setType(null)
+            }
             console.log('типы: ', data)
         } catch (e) {
             console.log(e)
@@ -121,53 +124,64 @@ const CreateCertificate = ({setModalIsActive, setTooltipIsOpen, isEdit = false, 
             getTypes(category)
         }
     }, [category])
+    useEffect(() => {
+        if (certificate) {
+            setName(certificate.name)
+            setCategory(certificate.categoryId)
+            setType(certificate.typeId)
+            setRank(certificate.rankId)
+            setInfo(certificate.info)
+        }
+    }, [certificate])
     
     return (
         <div className={classes.modalWrapper} onClick={(e) => setModalIsActive(false)}>
             <div className={classes.modalContainer} onClick={(e) => e.stopPropagation()}>
                 <div className={classes.createCertificate_container}>
-                    <h5>{isEdit ? 'Изменить сертификат' : 'Добавить сертификат'}</h5>
-                    <Input
-                        placeholder='Введите название'
-                        type='text'
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                    <Select dataList={categories} title='Выберите категорию' setValue={setCategory}/>
-                    <Select dataList={types} title='Выберите тип' setValue={setType}/>
-                    <Select dataList={ranks} title='Выберите уровень' setValue={setRank}/>
-                    <input
-                        ref={inputFileRef}
-                        type='file'
-                        onChange={selectFile}
-                    />
-                    <Button
-                        onClick={addInfo}
-                        title='Добавить описание'
-                    />
-                    {info.map(i =>
-                        <div key={i.number}>
-                            <input
-                                placeholder='Введите название описания'
-                                value={i.title}
-                                onChange={(e) => changeInfo('title', e.target.value, i.number)}
-                            />
-                            <input
-                                placeholder='Введите описание'
-                                value={i.description}
-                                onChange={(e) => changeInfo('description', e.target.value, i.number)}
-                            />
+                    <h4 className={classes.createCertificate__title}>{isEdit ? 'Изменить сертификат' : 'Добавить сертификат'}</h4>
+                    <div className={classes.createCertificate__data}>
+                        <Input
+                            placeholder='Введите название'
+                            type='text'
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                        <Select dataList={categories} title='Выберите категорию' setValue={setCategory}/>
+                        <Select dataList={types} title='Выберите тип' setValue={setType}/>
+                        <Select dataList={ranks} title='Выберите уровень' setValue={setRank}/>
+                        <input
+                            ref={inputFileRef}
+                            type='file'
+                            onChange={selectFile}
+                        />
+                        <Button
+                            onClick={addInfo}
+                            title='Добавить описание'
+                        />
+                        {info.map(i =>
+                            <div key={i.number}>
+                                <input
+                                    placeholder='Введите название описания'
+                                    value={i.title}
+                                    onChange={(e) => changeInfo('title', e.target.value, i.number)}
+                                />
+                                <input
+                                    placeholder='Введите описание'
+                                    value={i.description}
+                                    onChange={(e) => changeInfo('description', e.target.value, i.number)}
+                                />
+                            </div>
+                        )}
+                        <div className={classes.createCertificate_imgPreview}>
+                            {file &&
+                                <img src={URL.createObjectURL(file)}/>
+                            }
                         </div>
-                    )}
-                    <div className={classes.createCertificate_imgPreview}>
-                        {file ?
-                            <img src={URL.createObjectURL(file)}/>
-                            : 'Предпросмотр'
-                        }
                     </div>
                     <Button
                         onClick={(e) => addCertificate(info)}
-                        title='Добавить достижение'
+                        variant='primary_bg'
+                        title={isEdit ? 'Изменить' : 'Добавить'}
                     />
                 </div>
             </div>

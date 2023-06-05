@@ -81,13 +81,14 @@ class CertificateController {
     }
 
     async update(req, res, next) {
-        console.log(req.body)
-        console.log(req.files)
-        const {id, name, categoryId, typeId, rankId, userId, info} = req.body
-        const {img} = req.files
-        let fileName = uuid.v4() + ".jpg"
-        img.mv(path.resolve(__dirname, '..', 'static', fileName))
-
+        const {id, name, categoryId, typeId, rankId, userId, info, imgURL} = req.body
+        let fileName = imgURL || null
+        if (req.files) {
+            const {img} = req.files
+            fileName = uuid.v4() + ".jpg"
+            img.mv(path.resolve(__dirname, '..', 'static', fileName))
+        }
+        
         console.log({name, categoryId, typeId, rankId, userId, img: fileName})
         try {
             const certificate = await Certificate.update(

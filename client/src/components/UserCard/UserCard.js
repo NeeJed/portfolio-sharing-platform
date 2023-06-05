@@ -5,6 +5,7 @@ import { USERPAGE_ROUTE } from '../../utils/consts';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCertificates, fetchCertificatesByUserId } from '../../http/certificateAPI';
 import LoadingSpin from '../LoadingSpin/LoadingSpin';
+import { fetchOneCity } from '../../http/locationAPI';
 
 const UserCard = ({user}) => {
     const students = useSelector(state => state.students._students)
@@ -13,6 +14,7 @@ const UserCard = ({user}) => {
     const dispatch = useDispatch()
     const [userCertificatesIsLoading, setUserCertificatesIsLoading] = useState(true)
     const [userCertificates, setUserCertificates] = useState({rows: []})
+    const [userCity, setUserCity] = useState()
 
     const getCertificates = async () => {
         try {
@@ -24,9 +26,18 @@ const UserCard = ({user}) => {
             setUserCertificatesIsLoading(false)
         }
     }
+    const getUserCity = async () => {
+        try {
+            let data = await fetchOneCity(user.cityId)
+            dispatch(setUserCity(data.name))
+        } catch (e) {
+            console.log(e)
+        }
+    }
 
     useEffect(() => {
         getCertificates()
+        getUserCity()
     }, [])
     
     useEffect(() => {
@@ -47,6 +58,11 @@ const UserCard = ({user}) => {
                 <div className={classes.userName}>
                     {user.name} {user.lastName}
                 </div>
+                {userCity &&
+                    <div className={classes.userLocation}>
+                        {userCity}
+                    </div>
+                }
             </Link>
             <div className={classes.userCertificates}>
                 {userCertificatesIsLoading 

@@ -16,6 +16,7 @@
       -ms-flex-align: center;
           align-items: center;
   text-decoration: none;
+  color: #255C99;
 }
 
 .searchResult .userInfo .userImg {
@@ -28,9 +29,8 @@
      object-fit: cover;
 }
 
-.searchResult .userInfo .userName {
+.searchResult .userInfo .userName, .searchResult .userInfo .userLocation {
   margin-left: 15px;
-  color: #255C99;
 }
 
 .searchResult .userCertificates {

@@ -8,11 +8,16 @@ import Button from '../../Button/Button'
 import CreateCertificate from '../../CreateCertificate/CreateCertificate'
 import Portal from '../../Portal/Portal'
 import Tooltip from '../../Tooltip/Tooltip'
+import { PROFILE_ROUTE } from '../../../utils/consts'
+import { useLocation } from 'react-router-dom'
 
 const UserCertificateInfoModal = ({setModalIsActive, certificate, setTooltipIsOpen}) => {
     const categories = useSelector(state => state.certificate._categories)
     const types = useSelector(state => state.certificate._types)
     const ranks = useSelector(state => state.certificate._ranks)
+
+    const location = useLocation()
+    const isProfile = location.pathname === PROFILE_ROUTE
 
     const [category, setCategory] = useState({})
     const [type, setType] = useState({})
@@ -81,15 +86,19 @@ const UserCertificateInfoModal = ({setModalIsActive, certificate, setTooltipIsOp
                         <CreateCertificate setModalIsActive={setIsCertificateEdit} setTooltipIsOpen={setChangeCertificateTooltipIsOpen} isEdit={true} certificate={certificate}/>
                     </Portal>
                 }
-                <Button
-                    title='Редактировать'
-                    onClick={() => setIsCertificateEdit(true)}
-                />
-                <Button
-                    title='Удалить'
-                    variant='error'
-                    onClick={() => deleteCertificateInfo()}
-                />
+                {isProfile && 
+                    <Button
+                        title='Редактировать'
+                        onClick={() => setIsCertificateEdit(true)}
+                    />
+                }
+                {isProfile &&
+                    <Button
+                        title='Удалить'
+                        variant='error'
+                        onClick={() => deleteCertificateInfo()}
+                    />
+                }
             </div>
         </div>
     )

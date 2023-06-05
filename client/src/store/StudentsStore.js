@@ -6,7 +6,7 @@ const StudentsStore = createSlice({
         _students: [],
         _page: 1,
         _totalResults: 0,
-        _limit: 4,
+        _limit: 5,
         _selectedCategories: [],
         _selectedTypes: [],
         _selectedRanks: [],

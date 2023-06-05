@@ -4,8 +4,8 @@ import { BrowserRouter } from 'react-router-dom';
 import AppRouter from './components/AppRouter';
 import NavBar from './components/NavBar/NavBar';
 import { useSelector, useDispatch } from 'react-redux';
-import { check } from './http/userAPI';
-import { setUser, setIsAuth, } from '../src/store/UserStore';
+import { check, getUserProfileData } from './http/userAPI';
+import { setUser, setIsAuth, setUserInfo, } from '../src/store/UserStore';
 import LoadingSpin from './components/LoadingSpin/LoadingSpin';
 
 function App() {
@@ -21,11 +21,27 @@ function App() {
     } finally {
       setLoading(false)
     }
-  } 
+  }
+
+  const getUserInfo = async () => {
+    try {
+        let data = await getUserProfileData(user.id)
+        console.log(data);
+        dispatch(setUserInfo(data))
+    } catch (e) {
+        console.log(e)
+    }
+}
 
   useEffect(() => {
     getAuthorizationCheck()
   }, [])
+
+  useEffect(() => {
+    if (user.id) {
+      getUserInfo();
+    }
+  }, [user.id])
 
   if (loading) {
     return <LoadingSpin type='fullpage'/>

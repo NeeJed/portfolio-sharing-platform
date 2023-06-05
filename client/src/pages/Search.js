@@ -92,7 +92,7 @@ const Search = () => {
             className={classes.container}
             style={{minHeight: window.innerHeight - 50}}
         >
-            <div className={classes.searchBox}>
+            {/* <div className={classes.searchBox}>
                 <div className={classes.searchBox_content}>
                     <Input type='text' placeholder='Найти...'/>
                     <Button title='Поиск' variant='contrast'>
@@ -104,7 +104,7 @@ const Search = () => {
                         />
                     </Button>
                 </div>
-            </div>
+            </div> */}
             <div className={classes.mainBox}>
                 <div className={classes.mainBox_stats}>
                     <span className={classes.searchData}>

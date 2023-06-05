@@ -42,7 +42,6 @@
   display: -ms-flexbox;
   display: flex;
   position: absolute;
-  top: 50%;
   background: transparent;
 }
 
@@ -69,5 +68,113 @@
 }
 
 .welcomeBox .searchBox button {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 300px;
+  height: 50px;
   padding: 10px 15px;
+  -webkit-box-shadow: 0px 4px 7px 2px rgba(252, 252, 252, 0.3);
+          box-shadow: 0px 4px 7px 2px rgba(252, 252, 252, 0.3);
+}
+
+.welcomeBox .authregistrationBox {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-top: 250px;
+  padding: 15px;
+  border-radius: 20px;
+  gap: 50px;
+}
+
+.welcomeBox .authregistrationBox button {
+  padding: 5px 70px;
+  background: rgba(255, 255, 255, 0.25);
+  -webkit-box-shadow: 0 8px 32px 0 rgba(5, 5, 5, 0.15);
+          box-shadow: 0 8px 32px 0 rgba(5, 5, 5, 0.15);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.box {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 100vh;
+  width: 100%;
+  background: #984447;
+}
+
+.box__links {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: 80px 80px 80px;
+  -ms-grid-columns: auto auto;
+      grid-template: 80px 80px 80px / auto auto;
+  margin-top: 300px;
+}
+
+.box__data {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 10px;
+  margin: 10px;
+}
+
+.box__data_light {
+  background: whitesmoke;
+  color: #050505;
+}
+
+.box__data_dark {
+  background: #264F7D;
+  color: #FCFCFC;
+}
+
+.box__link_light {
+  background: whitesmoke;
+  color: #050505;
+}
+
+.box__link_light:hover {
+  color: #264F7D;
+}
+
+.box__link_dark {
+  background: #264F7D;
+  color: #FCFCFC;
+}
+
+.box__link_dark:hover {
+  color: #adb5bd;
+}
+
+.box__title {
+  position: absolute;
+  top: 150px;
+  left: 65px;
+  letter-spacing: 0.10em;
+}
+
+.box__title_light {
+  color: #FCFCFC;
+}
+
+.box__title_dark {
+  color: #050505;
 }

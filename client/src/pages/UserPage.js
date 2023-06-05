@@ -18,9 +18,11 @@ import Icons from '../components/Icons/Icons';
 import Portal from '../components/Portal/Portal';
 import { CSSTransition } from 'react-transition-group';
 import  { SCREEN_WIDTH_4 } from '../utils/constBreakpoints';
+import { fetchOneCity } from '../http/locationAPI';
 
 const UserPage = () => {
     const [userInfo, setUserInfo] = useState({})
+    const [userCity, setUserCity] = useState()
     const [userCertificates, setUserCertificates] = useState()
     const {id} = useParams()
     const isLoading = useRef(true)
@@ -35,6 +37,14 @@ const UserPage = () => {
             console.log(e)
         } finally {
             isLoading.current = false
+        }
+    }
+    const getUserCity = async () => {
+        try {
+            let data = await fetchOneCity(userInfo.cityId)
+            setUserCity(data.name)
+        } catch (e) {
+            console.log(e)
         }
     }
 
@@ -54,6 +64,10 @@ const UserPage = () => {
         getUserInfo()
         getUserCertificates()
     }, [])
+
+    useEffect(() => {
+        getUserCity()
+    }, [userInfo.cityId])
     return (
         <div className={classes.userProfile}>
             <div className={classes.userProfile_container}>
@@ -73,6 +87,7 @@ const UserPage = () => {
                             <DescriptionLine descriptionName='Фамилия' descriptionData={userInfo.lastName} className={classes.profileItem}/>
                             <DescriptionLine descriptionName='Дата рождения' descriptionData={userInfo.birthday} className={classes.profileItem}/>
                             <DescriptionLine descriptionName='Контактный телефон' descriptionData={userInfo.phoneNumber} className={classes.profileItem}/>
+                            <DescriptionLine descriptionName='Город' descriptionData={userCity} className={classes.profileItem}/>
                         </div>
                     </div>
                 :

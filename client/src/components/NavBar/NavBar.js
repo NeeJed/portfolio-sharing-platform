@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import classes from './NavBar.module.css';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { START_ROUTE, SEARCH_ROUTE, PROFILE_ROUTE, AUTH_ROUTE, REGISTRATION_ROUTE } from '../../utils/consts';
-import { setIsAuth, setUser } from '../../store/UserStore';
+import { setIsAuth, setUser, setUserCity } from '../../store/UserStore';
 import Button from '../Button/Button';
 import Icons from '../Icons/Icons';
 
@@ -15,6 +15,7 @@ const NavBar = () => {
     const logOut = () => {
         dispatch(setUser({}))
         dispatch(setIsAuth(false))
+        dispatch(setUserCity(''))
         localStorage.removeItem('token')
     }
 
@@ -33,7 +34,9 @@ const NavBar = () => {
                         <NavLink className={classes.link} to={SEARCH_ROUTE}>
                             Поиск
                         </NavLink>
-                        <NavLink className={classes.link} to={PROFILE_ROUTE}>
+                        <NavLink
+                            className={classes.link}
+                            to={user._isAuth ? PROFILE_ROUTE : REGISTRATION_ROUTE}>
                             Создать портфолио
                         </NavLink>
                     </div>
@@ -74,7 +77,7 @@ const NavBar = () => {
                                     />
                                     Мой профиль
                                 </NavLink>
-                                <Button className={classes.userMenu_button} title='Настройки'>
+                                {/* <Button className={classes.userMenu_button} title='Настройки'>
                                     <Icons
                                         name='settings'
                                         color='#000'
@@ -89,7 +92,7 @@ const NavBar = () => {
                                         size='32'
                                         className={classes.icon}
                                     />
-                                </Button>
+                                </Button> */}
                                 <Button
                                     className={classes.userMenu_button}
                                     onClick={() => logOut()}
