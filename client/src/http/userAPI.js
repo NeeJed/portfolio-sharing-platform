@@ -36,8 +36,27 @@ export const updateUserShareAccess = async (id, access) => {
     return data;
 }
 
-export const updateUserInfo = async (id, name, lastName, birthday, phone, city) => {
-    console.log(id, name, lastName, birthday, phone, city)
-    const {data} = await $host.put(`api/user/userInfo` + id, {params: {id, name, lastName, birthday, phone, city}})
+export const updateUserInfo = async (id, name, lastName, birthday, phone, city, educationalStage) => {
+    const {data} = await $host.put(`api/user/userInfo` + id, {params: {id, name, lastName, birthday, phone, city, educationalStage}})
     return data;
+}
+
+export const getAllEducationalStages = async () => {
+    const {data} = await $host.get(`api/educationalStage`)
+    return data;
+}
+
+export const getOneEducationalStage = async (id) => {
+    const {data} = await $host.get(`api/educationalStage/getOneById` + id, id)
+    return data;
+}
+
+export const createEducationalStage = async (educationalStage) => {
+    const {data} = await $host.post(`api/educationalStage/`, educationalStage)
+    return data;
+}
+
+export const deleteEducationalStage = async (id) => {
+    const {data} = await $authHost.delete('/api/educationalStage/deleteById' + id, id)
+    return {data}
 }

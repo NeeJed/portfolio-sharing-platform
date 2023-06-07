@@ -4,9 +4,10 @@ import { BrowserRouter } from 'react-router-dom';
 import AppRouter from './components/AppRouter';
 import NavBar from './components/NavBar/NavBar';
 import { useSelector, useDispatch } from 'react-redux';
-import { check, getUserProfileData } from './http/userAPI';
+import { check, getUserProfileData, getAllEducationalStages } from './http/userAPI';
 import { setUser, setIsAuth, setUserInfo, } from '../src/store/UserStore';
 import LoadingSpin from './components/LoadingSpin/LoadingSpin';
+import { setEducationalStages } from './store/StudentsStore';
 
 function App() {
   const user = useSelector(state => state.user._user)
@@ -26,15 +27,26 @@ function App() {
   const getUserInfo = async () => {
     try {
         let data = await getUserProfileData(user.id)
-        console.log(data);
+        console.log('Информация пользователя', data);
         dispatch(setUserInfo(data))
     } catch (e) {
         console.log(e)
     }
-}
+  }
+
+  const getEducationalStages = async () => {
+    try {
+        let data = await getAllEducationalStages()
+        console.log('Уровни образования', data);
+        dispatch(setEducationalStages(data))
+    } catch (e) {
+        console.log(e)
+    }
+  }
 
   useEffect(() => {
     getAuthorizationCheck()
+    getEducationalStages()
   }, [])
 
   useEffect(() => {

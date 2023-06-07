@@ -10,6 +10,7 @@ const StudentsStore = createSlice({
         _selectedCategories: [],
         _selectedTypes: [],
         _selectedRanks: [],
+        _educationalStages: [],
     },
     reducers: {
         setStudents(state, action) {
@@ -39,6 +40,9 @@ const StudentsStore = createSlice({
             state._selectedRanks = [...newRanks]
             console.log('Выбранные уровни: ', state._selectedRanks)
         },
+        setEducationalStages(state, action) {
+            state._educationalStages = action.payload;
+        },
     },
 });
 
@@ -51,6 +55,6 @@ const check = (state, payload) => {
     return state
 }
 
-export const {setStudents, setPage, setTotalResults, setLimit, setSelectedCategories, setSelectedTypes, setSelectedRanks} = StudentsStore.actions;
+export const {setStudents, setPage, setTotalResults, setLimit, setSelectedCategories, setSelectedTypes, setSelectedRanks, setEducationalStages} = StudentsStore.actions;
 
 export default StudentsStore.reducer;

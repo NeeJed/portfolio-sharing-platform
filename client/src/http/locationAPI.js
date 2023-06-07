@@ -17,7 +17,6 @@ export const fetchCities = async () => {
 }
 
 export const fetchOneCity = async (cityId) => {
-    console.log(cityId)
     const {data} = await $host.get('api/city/getOneById' + cityId, {cityId})
     return data
 }

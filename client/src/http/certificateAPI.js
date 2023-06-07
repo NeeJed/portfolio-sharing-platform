@@ -92,7 +92,6 @@ export const updateCertificate = async (certificate) => {
 }
 
 export const deleteCertificate = async (id) => {
-    console.log(id)
     const {data} = await $authHost.delete('/api/certificate/delete' + id, id)
     return {data}
 }

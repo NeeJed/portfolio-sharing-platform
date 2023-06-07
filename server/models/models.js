@@ -60,6 +60,11 @@ const City = sequelize.define('city', {
     name: {type: DataTypes.STRING},
 })
 
+const EducationalStage = sequelize.define('educational_stage', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    name: {type: DataTypes.STRING, unique: true},
+})
+
 User.hasOne(UserInfo)
 UserInfo.belongsTo(User)
 
@@ -68,6 +73,9 @@ Rating.belongsTo(User)
 
 User.hasMany(Certificate)
 Certificate.belongsTo(User)
+
+EducationalStage.hasMany(UserInfo)
+UserInfo.belongsTo(EducationalStage)
 
 Region.hasMany(City)
 City.belongsTo(Region)
@@ -101,4 +109,5 @@ module.exports = {
     CertificateInfo,
     Region,
     City,
+    EducationalStage,
 }

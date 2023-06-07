@@ -109,12 +109,14 @@ class UserController {
         const user = await UserInfo.findOne(
             {
                 where: {userId: id},
-                // where: {shareAccess: true},
             },
         )
         if (!user) {
             return next(ApiError.badRequest('Пользователь не найден'))
         }
+        // if (user.shareAccess === false) {
+        //     return next(ApiError.forbidden('Пользователь запретил доступ к просмотру профиля'))
+        // }
         return res.json(user)
     }
 
@@ -139,8 +141,8 @@ class UserController {
     }
 
     async updateUserInfo(req, res, next) {
-        const {id, name, lastName, birthday, phone, city} = req.body.params
-        console.log(city)
+        let {id, name, lastName, birthday, phone, city, educationalStage} = req.body.params
+        console.log(req.body.params)
         try {
             const user = await UserInfo.update(
                 {
@@ -149,6 +151,7 @@ class UserController {
                     birthday: birthday,
                     phoneNumber: phone,
                     cityId: city,
+                    educationalStageId: educationalStage,
                 }, 
                 {
                     where: {

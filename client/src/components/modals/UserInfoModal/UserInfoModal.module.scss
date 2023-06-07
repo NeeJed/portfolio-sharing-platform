@@ -37,12 +37,14 @@
             margin-bottom: 20px;
         }
         .modal_userData {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            // display: flex;
+            // flex-direction: column;
+            // justify-content: center;
+            // align-items: center;
             width: 350px;
+            max-height: 350px;
             margin-bottom: 20px;
+            overflow-y: scroll;
             & * {
                 margin-bottom: 10px;
                 width: 100%;

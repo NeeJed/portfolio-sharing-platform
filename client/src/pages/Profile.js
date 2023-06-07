@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getUserProfileData, updateUserShareAccess } from '../http/userAPI';
-import { setUserInfo, setUserCertificates, setUserCity, setUserRegion } from '../store/UserStore';
+import { getUserProfileData, updateUserShareAccess, getOneEducationalStage } from '../http/userAPI';
+import { setUserInfo, setUserCertificates, setUserCity, setUserRegion, setUserEducationalStage } from '../store/UserStore';
 import LoadingSpin from '../components/LoadingSpin/LoadingSpin';
 import { fetchCertificatesByUserId, fetchTypes, fetchCategories, fetchRanks } from '../http/certificateAPI';
 import CreateCertificate from '../components/CreateCertificate/CreateCertificate';
@@ -89,10 +89,17 @@ const Profile = () => {
             dispatch(setUserCity(data.name))
         } catch (e) {
             console.log(e)
-        } finally {
-            console.log(userCity)
         }
     }
+    // const getUserEducationalStage = async () => {
+    //     try {
+    //         let data = await getOneEducationalStage(userInfo.educationalStageId)
+    //         console.log(data.name)
+    //         dispatch(setUserEducationalStage(data.name))
+    //     } catch (e) {
+    //         console.log(e)
+    //     }
+    // }
     
     const getUserCertificates = async () => {
         try {
@@ -117,7 +124,6 @@ const Profile = () => {
     }
 
     useEffect(() => {
-        getUserInfo();
         getUserCertificates();
         if (!categories.length) {
             getCategories()
@@ -133,8 +139,13 @@ const Profile = () => {
     useEffect(() => {
         getUserCity()
     }, [userInfo.cityId])
+    useEffect(() => {
+        if (!userInfo) {
+            getUserInfo();
+        }
+    }, [userInfo])
 
-    if (userDataIsLoading.current) {
+    if (!userInfo && userDataIsLoading.current) {
         return <LoadingSpin type='component'/>
     }
 

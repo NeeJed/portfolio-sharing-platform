@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchTypes, fetchRanks, createType, createRank, deleteType, deleteRank, fetchCategories, createCategory } from '../../http/certificateAPI';
 import { setTypes, setRanks, setCategories } from '../../store/CertificateStore';
 import ErrorBox from '../ErrorBox/ErrorBox';
+import { createEducationalStage, deleteEducationalStage } from '../../http/userAPI';
 
 const AdminFilterEditing = () => {
     const dispatch = useDispatch()
@@ -35,6 +36,7 @@ const AdminFilterEditing = () => {
             console.log(e)
         }
     }
+
     const [category, setCategory] = useState()
     const addCategory = async () => {
         let data;
@@ -45,7 +47,6 @@ const AdminFilterEditing = () => {
             console.log(e)
         }
     }
-
     const [categoryForType, setCategoryForType] = useState()
     const [type, setType] = useState()
     const addType = async () => {
@@ -68,6 +69,15 @@ const AdminFilterEditing = () => {
         } catch (e) {
             setErrorMessage(e.response.data.message)
             console.log(e.response.data.message)
+        }
+    }
+    const [educationalStage, setEducationalStage] = useState()
+    const addEducationalStage = async () => {
+        let data;
+        try {
+            data = await createEducationalStage({name: educationalStage})
+        } catch (e) {
+            console.log(e)
         }
     }
 
@@ -95,6 +105,18 @@ const AdminFilterEditing = () => {
             console.log(e.response.data.message)
         }
     }
+    const [educationalStageId, setEducationalStageId] = useState()
+    const removeEducationalStage = async () => {
+        let data;
+        try {
+            data = await deleteEducationalStage(educationalStageId)
+            console.log(data)
+        } catch (e) {
+            setErrorMessage(e.response.data.message)
+            console.log(e.response.data.message)
+        }
+    }
+
     return (
         <div>
             {
@@ -131,6 +153,15 @@ const AdminFilterEditing = () => {
             </div>
             <div>
                 <input
+                    placeholder='уровень образования'
+                    value={educationalStage}
+                    onChange={(e) => setEducationalStage(e.target.value)}
+                />
+                <button onClick={() => addEducationalStage()}>Добавить</button>
+            </div>
+
+            <div>
+                <input
                     placeholder='Удалить тип по id'
                     value={typeId}
                     onChange={(e) => setTypeId(e.target.value)}
@@ -144,6 +175,14 @@ const AdminFilterEditing = () => {
                     onChange={(e) => setRankId(e.target.value)}
                 />
                 <button onClick={() => removeRank()}>Удалить</button>
+            </div>
+            <div>
+                <input
+                    placeholder='Удалить уровень образования по id'
+                    value={educationalStageId}
+                    onChange={(e) => setEducationalStageId(e.target.value)}
+                />
+                <button onClick={() => removeEducationalStage()}>Удалить</button>
             </div>
         </div>
     )

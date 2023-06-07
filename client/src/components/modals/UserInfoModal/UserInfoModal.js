@@ -17,10 +17,12 @@ const UserInfoModal = ({setModalIsActive, userInfo, setTooltipIsOpen}) => {
     const [userPhoneNumber, setUserPhoneNumber] = useState(userInfo.phoneNumber)
     const [userImageIconIsActive, setUserImageIconIsActive] = useState(false)
     const [region, setRegion] = useState(null)
-    const [city, setCity] = useState(null)
+    const [city, setCity] = useState(userInfo.cityId)
+    const [educationalStage, setEducationalStage] = useState(userInfo.educationalStageId)
 
     const regions = useSelector(state => state.location.regions)
     const cities = useSelector(state => state.location.cities)
+    const educationalStages = useSelector(state => state.students._educationalStages)
 
     const dispatch = useDispatch()
 
@@ -33,8 +35,8 @@ const UserInfoModal = ({setModalIsActive, userInfo, setTooltipIsOpen}) => {
 
     const updateUserInformation = async () => {
         try {
-            console.log(userInfo.userId, userName, userLastName, userBirthday, userPhoneNumber, city)
-            let data = await updateUserInfo(userInfo.userId, userName, userLastName, userBirthday, userPhoneNumber, city)
+            console.log(userInfo.userId, userName, userLastName, userBirthday, userPhoneNumber, city, educationalStage)
+            let data = await updateUserInfo(userInfo.userId, userName, userLastName, userBirthday, userPhoneNumber, city, educationalStage)
         } catch (e) {
             console.log(e)
         } finally {
@@ -70,7 +72,6 @@ const UserInfoModal = ({setModalIsActive, userInfo, setTooltipIsOpen}) => {
     useEffect(() => {
         if (region) {
             getCities(region)
-            console.log(region)
         }
     }, [region])
 
@@ -133,7 +134,7 @@ const UserInfoModal = ({setModalIsActive, userInfo, setTooltipIsOpen}) => {
                     />
                     <Select dataList={regions} title='Выберите регион' setValue={setRegion}/>
                     <Select dataList={cities} title='Выберите город' setValue={setCity}/>
-                    
+                    <Select dataList={educationalStages} title='Выберите уровень образования' setValue={setEducationalStage}/>
                 </div>
                 <Button title='Подтвердить' variant='primary_bg' onClick={(e) => updateUserInformation()}/>
             </div>
