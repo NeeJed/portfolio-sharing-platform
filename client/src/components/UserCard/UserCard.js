@@ -9,12 +9,14 @@ import { fetchOneCity } from '../../http/locationAPI';
 
 const UserCard = ({user}) => {
     const students = useSelector(state => state.students._students)
+    const educationalStages = useSelector(state => state.students._educationalStages)
     const page = useSelector(state => state.students._page)
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const [userCertificatesIsLoading, setUserCertificatesIsLoading] = useState(true)
     const [userCertificates, setUserCertificates] = useState({rows: []})
     const [userCity, setUserCity] = useState()
+    const [userEducationalStageName, setUserEducationalStageName] = useState('')
 
     const getCertificates = async () => {
         try {
@@ -34,10 +36,17 @@ const UserCard = ({user}) => {
             console.log(e)
         }
     }
+    const getUserEducationalStageName = () => {
+        let userEducationalStage = educationalStages.filter((stage) => stage.id === user.educationalStageId)
+        if (userEducationalStage.length) {
+            setUserEducationalStageName(userEducationalStage[0].name)
+        }
+    }
 
     useEffect(() => {
         getCertificates()
         getUserCity()
+        getUserEducationalStageName()
     }, [])
     
     useEffect(() => {
@@ -55,12 +64,17 @@ const UserCard = ({user}) => {
                     src={`${process.env.REACT_APP_API_URL}/${user.img}`}
                     alt={user.name}
                 />
-                <div className={classes.userName}>
+                <div className={`${classes.userData} ${classes.userName}`}>
                     {user.name} {user.lastName}
                 </div>
                 {userCity &&
-                    <div className={classes.userLocation}>
+                    <div className={`${classes.userData} ${classes.userLocation}`}>
                         {userCity}
+                    </div>
+                }
+                {userEducationalStageName &&
+                    <div className={`${classes.userData} ${classes.userEducationalStage}`}>
+                        {userEducationalStageName}
                     </div>
                 }
             </Link>

@@ -24,6 +24,8 @@ const UserPage = () => {
     const [userInfo, setUserInfo] = useState({})
     const [userCity, setUserCity] = useState()
     const [userCertificates, setUserCertificates] = useState()
+    const educationalStages = useSelector(state => state.students._educationalStages)
+    const [userEducationalStageName, setUserEducationalStageName] = useState('')
     const {id} = useParams()
     const isLoading = useRef(true)
     const userCertificatesIsLoading = useRef(true)
@@ -47,6 +49,12 @@ const UserPage = () => {
             console.log(e)
         }
     }
+    const getUserEducationalStageName = () => {
+        let userEducationalStage = educationalStages.filter((stage) => stage.id === userInfo.educationalStageId)
+        if (userEducationalStage.length) {
+            setUserEducationalStageName(userEducationalStage[0].name)
+        }
+    }
 
     const getUserCertificates = async () => {
         try {
@@ -68,6 +76,9 @@ const UserPage = () => {
     useEffect(() => {
         getUserCity()
     }, [userInfo.cityId])
+    useEffect(() => {
+        getUserEducationalStageName()
+    }, [userInfo.educationalStageId])
     return (
         <div className={classes.userProfile}>
             <div className={classes.userProfile_container}>
@@ -88,6 +99,7 @@ const UserPage = () => {
                             <DescriptionLine descriptionName='Дата рождения' descriptionData={userInfo.birthday} className={classes.profileItem}/>
                             <DescriptionLine descriptionName='Контактный телефон' descriptionData={userInfo.phoneNumber} className={classes.profileItem}/>
                             <DescriptionLine descriptionName='Город' descriptionData={userCity} className={classes.profileItem}/>
+                            <DescriptionLine descriptionName='Уровень образования' descriptionData={userEducationalStageName} className={classes.profileItem}/>
                         </div>
                     </div>
                 :

@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchTypes, fetchRanks, createType, createRank, deleteType, deleteRank, fetchCategories, createCategory } from '../http/certificateAPI';
 import { setTypes, setRanks, setCategories } from '../store/CertificateStore';
 import { getAllUsers } from '../http/userAPI';
-import { setStudents, setTotalResults, setSelectedCategories, setSelectedTypes, setSelectedRanks } from '../store/StudentsStore';
+import { setStudents, setTotalResults, setSelectedCategories, setSelectedTypes, setSelectedRanks, setSelectedEducationalStages } from '../store/StudentsStore';
 import LoadingSpin from '../components/LoadingSpin/LoadingSpin';
 import Filter from '../components/Filter/Filter';
 import { useNavigate } from 'react-router-dom';
@@ -25,9 +25,11 @@ const Search = () => {
     const selectedCategories = useSelector(state => state.students._selectedCategories)
     const selectedTypes = useSelector(state => state.students._selectedTypes)
     const selectedRanks = useSelector(state => state.students._selectedRanks)
+    const selectedEducationalStages = useSelector(state => state.students._selectedEducationalStages)
     const categories = useSelector(state => state.certificate._categories)
     const types = useSelector(state => state.certificate._types)
     const ranks = useSelector(state => state.certificate._ranks)
+    const educationalStages = useSelector(state => state.students._educationalStages)
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -64,8 +66,9 @@ const Search = () => {
     const getStudents = async () => {
         try {
             let data = await getAllUsers(
-                selectedCategories, selectedTypes, selectedRanks, page, limit
+                selectedCategories, selectedTypes, selectedRanks, selectedEducationalStages, page, limit
             )
+            console.log(selectedEducationalStages)
             dispatch(setStudents(data.rows))
             dispatch(setTotalResults(data.count))
             console.log('студенты: ', data.rows)
@@ -85,7 +88,7 @@ const Search = () => {
     
     useEffect(() => {
         getStudents()
-    }, [page, selectedCategories, selectedTypes, selectedRanks])
+    }, [page, selectedCategories, selectedTypes, selectedRanks, selectedEducationalStages])
     
     return (
         <div
@@ -115,7 +118,8 @@ const Search = () => {
                     {/* <AdminFilterEditing/> */}
                     <aside className={classes.mainBox_filter}>
                         <FilterGroup titlesList={categories} dataList={types} filterData={setSelectedTypes}/>
-                        <Filter dataList={ranks} filterData={setSelectedRanks} title='Уровень достижения'/>
+                        <Filter dataList={ranks} filterData={setSelectedRanks} title='Уровень достижений'/>
+                        <Filter dataList={educationalStages} filterData={setSelectedEducationalStages} title='Уровень образования'/>
                     </aside>
                     <section className={classes.mainBox_searchResults}>
                         {!studentsIsLoading

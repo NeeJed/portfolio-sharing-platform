@@ -33,6 +33,15 @@
                 background-color: rgba($black, 0.1);
             }
         }
+        .buttons {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
     }
 }
 

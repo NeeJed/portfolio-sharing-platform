@@ -22,6 +22,7 @@
   width: 100%;
   max-width: 350px;
   overflow-y: scroll;
+  margin-bottom: 10px;
 }
 
 .createCertificate__data button {
@@ -31,6 +32,10 @@
 .createCertificate__data * {
   width: 100%;
   margin-bottom: 10px;
+}
+
+.createCertificate__data *:last-child {
+  margin-bottom: 0;
 }
 
 .createCertificate__title {

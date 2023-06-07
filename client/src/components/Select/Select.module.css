@@ -26,7 +26,6 @@
 
 .userMenu {
   z-index: 1;
-  position: absolute;
   height: 200px;
   width: auto;
   background: #FCFCFC;

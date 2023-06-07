@@ -29,8 +29,20 @@
      object-fit: cover;
 }
 
-.searchResult .userInfo .userName, .searchResult .userInfo .userLocation {
+.searchResult .userInfo .userData {
   margin-left: 15px;
+}
+
+.searchResult .userInfo .userName {
+  color: #255C99;
+}
+
+.searchResult .userInfo .userLocation {
+  color: #984447;
+}
+
+.searchResult .userInfo .userEducationalStage {
+  color: #6B0504;
 }
 
 .searchResult .userCertificates {

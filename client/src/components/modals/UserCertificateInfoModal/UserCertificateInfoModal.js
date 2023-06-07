@@ -86,19 +86,21 @@ const UserCertificateInfoModal = ({setModalIsActive, certificate, setTooltipIsOp
                         <CreateCertificate setModalIsActive={setIsCertificateEdit} setTooltipIsOpen={setChangeCertificateTooltipIsOpen} isEdit={true} certificate={certificate}/>
                     </Portal>
                 }
-                {isProfile && 
-                    <Button
-                        title='Редактировать'
-                        onClick={() => setIsCertificateEdit(true)}
-                    />
-                }
-                {isProfile &&
-                    <Button
-                        title='Удалить'
-                        variant='error'
-                        onClick={() => deleteCertificateInfo()}
-                    />
-                }
+                <div className={classes.buttons}>
+                    {isProfile && 
+                        <Button
+                            title='Редактировать'
+                            onClick={() => setIsCertificateEdit(true)}
+                        />
+                    }
+                    {isProfile &&
+                        <Button
+                            title='Удалить'
+                            variant='error'
+                            onClick={() => deleteCertificateInfo()}
+                        />
+                    }
+                </div>
             </div>
         </div>
     )

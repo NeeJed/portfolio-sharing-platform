@@ -53,12 +53,13 @@ class UserController {
     }
 
     async getAllUsers(req, res, next) {
-        let {categoryId, typeId, rankId, limit, page} = req.query
+        let {categoryId, typeId, rankId, educationalStageId, limit, page} = req.query
         page = page || 1
         limit = limit || 7
         categoryId = categoryId
         typeId = typeId
         rankId = rankId
+        educationalStageId = educationalStageId
         let offset = page * limit - limit
         let users
         let certificates
@@ -86,7 +87,19 @@ class UserController {
         let suitableUsers = []
         certificates.map(certificate => suitableUsers.push(certificate.dataValues.userId))
         suitableUsers = Array.from(new Set(suitableUsers))
-        users = await UserInfo.findAndCountAll({where: {shareAccess: true, userId: suitableUsers}, limit, offset})
+        if (educationalStageId) {
+            users = await UserInfo.findAndCountAll({
+                where: {
+                    shareAccess: true,
+                    userId: suitableUsers,
+                    educationalStageId: educationalStageId,
+                }, limit, offset
+            })
+        } else {
+            users = await UserInfo.findAndCountAll({
+                where: { shareAccess: true, userId: suitableUsers,}, limit, offset
+            })
+        }
         return res.json(users)
     }
 

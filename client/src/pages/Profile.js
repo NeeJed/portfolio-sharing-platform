@@ -25,10 +25,12 @@ const Profile = () => {
     let userInfo = useSelector(state => state.user._userInfo)
     let userCertificates = useSelector(state => state.user._userCertificates)
     let userCity = useSelector(state => state.user._userCity)
+    const educationalStages = useSelector(state => state.students._educationalStages)
     const dispatch = useDispatch();
     const userDataIsLoading = useRef(true)
     const userCertificatesIsLoading = useRef(true)
     const [userInfoModalIsActive, setUserInfoModalIsActive] = useState(false)
+    const [userEducationalStageName, setUserEducationalStageName] = useState('')
     const [changeUserInfoTooltipIsActive, setChangeUserInfoTooltipIsActive] = useState(false)
     const [changeUserAccessTooltipIsActive, setChangeUserAccessTooltipIsActive] = useState(false)
     const [addCertificateTooltipIsActive, setAddCertificateTooltipIsActive] = useState(false)
@@ -91,15 +93,12 @@ const Profile = () => {
             console.log(e)
         }
     }
-    // const getUserEducationalStage = async () => {
-    //     try {
-    //         let data = await getOneEducationalStage(userInfo.educationalStageId)
-    //         console.log(data.name)
-    //         dispatch(setUserEducationalStage(data.name))
-    //     } catch (e) {
-    //         console.log(e)
-    //     }
-    // }
+    const getUserEducationalStageName = () => {
+        let userEducationalStage = educationalStages.filter((stage) => stage.id === userInfo.educationalStageId)
+        if (userEducationalStage.length) {
+            setUserEducationalStageName(userEducationalStage[0].name)
+        }
+    }
     
     const getUserCertificates = async () => {
         try {
@@ -144,6 +143,9 @@ const Profile = () => {
             getUserInfo();
         }
     }, [userInfo])
+    useEffect(() => {
+        getUserEducationalStageName()
+    }, [userInfo.educationalStageId])
 
     if (!userInfo && userDataIsLoading.current) {
         return <LoadingSpin type='component'/>
@@ -208,6 +210,7 @@ const Profile = () => {
                         <DescriptionLine descriptionName='Фамилия' descriptionData={userInfo.lastName} className={classes.profileItem}/>
                         <DescriptionLine descriptionName='Дата рождения' descriptionData={userInfo.birthday} className={classes.profileItem}/>
                         <DescriptionLine descriptionName='Город' descriptionData={userCity} className={classes.profileItem}/>
+                        <DescriptionLine descriptionName='Уровень образования' descriptionData={userEducationalStageName} className={classes.profileItem}/>
                         <DescriptionLine descriptionName='Контактный телефон' descriptionData={userInfo.phoneNumber} className={classes.profileItem}/>
                         <DescriptionLineEditable
                             descriptionName='Доступ к просмотру профиля'
