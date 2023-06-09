@@ -117,9 +117,9 @@ const Search = () => {
                 <div className={classes.mainBox_content}>
                     {/* <AdminFilterEditing/> */}
                     <aside className={classes.mainBox_filter}>
-                        <FilterGroup titlesList={categories} dataList={types} filterData={setSelectedTypes}/>
-                        <Filter dataList={ranks} filterData={setSelectedRanks} title='Уровень достижений'/>
-                        <Filter dataList={educationalStages} filterData={setSelectedEducationalStages} title='Уровень образования'/>
+                        <FilterGroup titlesList={categories} dataList={types} filterData={setSelectedTypes} dispatch={dispatch}/>
+                        <Filter dataList={ranks} filterData={setSelectedRanks} title='Уровень достижений' dispatch={dispatch}/>
+                        <Filter dataList={educationalStages} filterData={setSelectedEducationalStages} title='Уровень образования' dispatch={dispatch}/>
                     </aside>
                     <section className={classes.mainBox_searchResults}>
                         {!studentsIsLoading

@@ -8,6 +8,7 @@ import { registration, login, getUserProfileData } from '../http/userAPI';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUser, setIsAuth, setUserInfo } from '../store/UserStore';
 import ErrorBox from '../components/ErrorBox/ErrorBox';
+import Checkbox from '../components/Checkbox/Checkbox';
 
 const Auth = () => {
     const user = useSelector(state => state.user._user)
@@ -18,18 +19,32 @@ const Auth = () => {
     const isLogin = location.pathname === AUTH_ROUTE
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [consentPersonalData, setConsentPersonalData] = useState(false)
 
     const [errorMessage, setErrorMessage] = useState('')
 
     const click = async () => {
         try {
             let data;
+            if (!isEmailValid(email)) {
+                setErrorMessage('Неправильный формат адреса электронной почты')
+                return new Error('Ошибка ввода email')
+            }
+            if (!isPasswordValid(password)) {
+                setErrorMessage('Минимальная длина пароля - 6 знаков')
+                return new Error('Ошибка ввода пароля')
+            }
             if (isLogin) {
                 data = await login(email, password);
                 console.log(data);
             } else {
-                data = await registration(email, password);
-                console.log(data)
+                if(!isConsentPersonalData(consentPersonalData)) {
+                    setErrorMessage('Не дано согласие на обработку персональных данных')
+                    return new Error('Ошибка регистрации')
+                } else {
+                    data = await registration(email, password);
+                    console.log(data)
+                }
             }
             dispatch(setUser(data))
             dispatch(setIsAuth(true))
@@ -38,6 +53,22 @@ const Auth = () => {
         } catch (e) {
             setErrorMessage(e.response.data.message)
         }
+    }
+    
+    const isEmailValid = (email) => {
+        return /\S+@\S+\.\S+/.test(email);
+    }
+
+    const isPasswordValid = (password) => {
+        if (password.length < 6) {
+            return false
+        } else return true
+    }
+
+    const isConsentPersonalData = (consentPersonalData) => {
+        if (!consentPersonalData) {
+            return false
+        } else return true
     }
 
     return (
@@ -48,8 +79,7 @@ const Auth = () => {
             <div className={classes.formContainer}>
                 <h3 className={classes.title}>{isLogin ? 'Авторизация' : 'Регистрация'}</h3>
                 <form className={classes.form}>
-                    {
-                        errorMessage !== '' &&
+                    {errorMessage !== '' &&
                         <ErrorBox
                             errorMessage={errorMessage}
                         />
@@ -68,6 +98,16 @@ const Auth = () => {
                         onChange={e => setPassword(e.target.value)}
                         onInput={() => setErrorMessage('')}
                     />
+                    {!isLogin &&
+                        <Checkbox
+                            data={consentPersonalData === 1
+                            ?
+                                {id: 0, name: 'Дано согласие на обработку персональных данных'}
+                            :
+                                {id: 1, name: 'Даю согласие на обработку персональных данных'}}
+                            filterData={setConsentPersonalData}
+                        />
+                    }
                     <div className={classes.form_bottom}>
                         <Button
                             type="button"
