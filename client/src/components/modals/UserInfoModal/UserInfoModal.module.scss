@@ -84,6 +84,14 @@
     }
 }
 
+.Error_errorContainer {
+    position: absolute;
+    .errorMessage {
+        top: 0;
+        right: 150px;
+    }
+}
+
 .userImageIcon-enter {
     opacity: 0;
     transform:translateY(3%);

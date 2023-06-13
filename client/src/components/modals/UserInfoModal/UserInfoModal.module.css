@@ -116,6 +116,15 @@
   stroke: rgba(5, 5, 5, 0.4);
 }
 
+.Error_errorContainer {
+  position: absolute;
+}
+
+.Error_errorContainer .errorMessage {
+  top: 0;
+  right: 150px;
+}
+
 .userImageIcon-enter {
   opacity: 0;
   -webkit-transform: translateY(3%);

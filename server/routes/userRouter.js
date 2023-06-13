@@ -10,6 +10,6 @@ router.get('/allusers', userController.getAllUsers)
 router.get('/user:id', userController.getUserById)
 router.get('/profile:id', userController.getUserInfoById)
 router.put('/userShareAccess:id/:access', userController.updateUserShareAccess)
-router.put('/userInfo:id', userController.updateUserInfo)
+router.put('/userInfo', userController.updateUserInfo)
 
 module.exports = router;

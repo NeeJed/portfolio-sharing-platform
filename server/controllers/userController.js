@@ -2,6 +2,7 @@ const ApiError = require('../error/ApiError');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const path = require('path');
+const uuid = require('uuid');
 const {User, UserInfo, Certificate} = require('../models/models');
 
 const generateJwt = (id, email, role) => {
@@ -154,17 +155,18 @@ class UserController {
     }
 
     async updateUserInfo(req, res, next) {
-        let {id, name, lastName, birthday, phone, city, educationalStage} = req.body.params
-        console.log(req.body.params)
+        const {id, name, lastName, birthday, phone, city, educationalStage, imgURL} = req.body
+        let fileName = imgURL || 'defaultUserImage.jpg'
+        if (req.files) {
+            const {img} = req.files
+            fileName = uuid.v4() + ".jpg"
+            img.mv(path.resolve(__dirname, '..', 'static', fileName))
+        }
         try {
             const user = await UserInfo.update(
                 {
                     name: name,
-                    lastName: lastName,
-                    birthday: birthday,
-                    phoneNumber: phone,
-                    cityId: city,
-                    educationalStageId: educationalStage,
+                    img: fileName,
                 }, 
                 {
                     where: {
@@ -172,6 +174,31 @@ class UserController {
                     }
                 }
             )
+            if (lastName && lastName !== 'null') {
+                const user = await UserInfo.update({lastName: lastName,}, 
+                    {where: {userId: id}
+                })
+            }
+            if (birthday && birthday !== 'null') {
+                const user = await UserInfo.update({birthday: birthday}, 
+                    {where: {userId: id}
+                })
+            }
+            if (phone && phone !== 'null') {
+                const user = await UserInfo.update({phoneNumber: phone}, 
+                    {where: {userId: id}
+                })
+            }
+            if (city && city !== 'null') {
+                const user = await UserInfo.update({cityId: city}, 
+                    {where: {userId: id}
+                })
+            }
+            if (educationalStage && educationalStage !== 'null') {
+                const user = await UserInfo.update({educationalStageId: educationalStage}, 
+                    {where: {userId: id}
+                })
+            }
             return res.json(user)
         } catch (e) {
             return next(ApiError.badRequest('Ошибка изменения'))

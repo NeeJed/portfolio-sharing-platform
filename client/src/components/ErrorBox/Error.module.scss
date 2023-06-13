@@ -2,11 +2,15 @@
 
 .errorContainer {
     position: relative;
+    width: 100%;
+    max-width: 400px;
 }
 .errorMessage {
+    z-index: 1;
     pointer-events: none;
     display: block;
     position: absolute;
+    width: 100%;
     top: -15px;
     right: -15px;
     padding: 5px 10px;

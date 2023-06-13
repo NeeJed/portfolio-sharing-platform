@@ -9,6 +9,7 @@ import { fetchRegions, fetchCitiesByRegionId } from '../../../http/locationAPI'
 import { setRegions, setCities } from '../../../store/LocationStore'
 import { useDispatch, useSelector } from 'react-redux'
 import Select from '../../Select/Select'
+import ErrorBox from '../../ErrorBox/ErrorBox'
 
 const UserInfoModal = ({setModalIsActive, userInfo, setTooltipIsOpen}) => {
     const [userName, setUserName] = useState(userInfo.name)
@@ -19,6 +20,8 @@ const UserInfoModal = ({setModalIsActive, userInfo, setTooltipIsOpen}) => {
     const [region, setRegion] = useState(null)
     const [city, setCity] = useState(userInfo.cityId)
     const [educationalStage, setEducationalStage] = useState(userInfo.educationalStageId)
+    const [errorMessage, setErrorMessage] = useState('')
+    const [userImageFile, setUserImageFile] = useState()
 
     const regions = useSelector(state => state.location.regions)
     const cities = useSelector(state => state.location.cities)
@@ -33,15 +36,48 @@ const UserInfoModal = ({setModalIsActive, userInfo, setTooltipIsOpen}) => {
         exitActive: classes['userImageIcon-exit-active'],
     }
 
+    const selectFile = e => {
+        setUserImageFile(e.target.files[0])
+    }
+
+    const phoneNumberValidation = (userPhoneNumber) => {
+        let validatedNumber = userPhoneNumber
+        if (userPhoneNumber) {
+            validatedNumber = userPhoneNumber.replace(/\D/g, '').replace(/^7/, '8')
+        }
+        return validatedNumber
+    }
+
+    const isPhoneNumberValid = (userPhoneNumber) => {
+        if (userPhoneNumber) {
+            return userPhoneNumber.length < 12
+        } else return true
+    }
+
     const updateUserInformation = async () => {
         try {
-            console.log(userInfo.userId, userName, userLastName, userBirthday, userPhoneNumber, city, educationalStage)
-            let data = await updateUserInfo(userInfo.userId, userName, userLastName, userBirthday, userPhoneNumber, city, educationalStage)
+            let validatedPhoneNumber = phoneNumberValidation(userPhoneNumber)
+            if (isPhoneNumberValid(validatedPhoneNumber)) {
+                const formData = new FormData()
+                formData.append('id', userInfo.userId);
+                formData.append('name', userName)
+                formData.append('lastName', userLastName)
+                formData.append('birthday', userBirthday)
+                formData.append('phone', validatedPhoneNumber)
+                formData.append('city', city)
+                formData.append('educationalStage', educationalStage)
+                formData.append('imgURL', userInfo.img)
+                formData.append('img', userImageFile)
+                console.log(formData)
+                let data = await updateUserInfo(formData)
+                setModalIsActive(false)
+                setTooltipIsOpen(true)
+            } else {
+                setErrorMessage('Номер телефона должен содержать не более 11 цифр')
+            }
         } catch (e) {
             console.log(e)
-        } finally {
-            setModalIsActive(false)
-            setTooltipIsOpen(true)
+            setErrorMessage(e.pesponse.data.message)
         }
     }
 
@@ -87,6 +123,11 @@ const UserInfoModal = ({setModalIsActive, userInfo, setTooltipIsOpen}) => {
                     />
                 </div>
                 <h4 className={classes.modal_title}>Изменение данных профиля</h4>
+                {errorMessage !== '' &&
+                    <ErrorBox
+                        errorMessage={errorMessage}
+                    />
+                }
                 <div
                     className={classes.userImageContainer}
                     onMouseOver={() => setUserImageIconIsActive(true)}
@@ -105,7 +146,13 @@ const UserInfoModal = ({setModalIsActive, userInfo, setTooltipIsOpen}) => {
                     <img
                         src={`${process.env.REACT_APP_API_URL}/${userInfo.img}`}
                         className={classes.userImage}
+                        alt='Аватар пользователя'
                     />
+                    <input
+                            // ref={inputFileRef}
+                            type='file'
+                            onChange={selectFile}
+                        />
                 </div>
                 <div className={classes.modal_userData}>
                     <Input
@@ -113,24 +160,28 @@ const UserInfoModal = ({setModalIsActive, userInfo, setTooltipIsOpen}) => {
                         type='text'
                         value={userName}
                         onChange={(e) => setUserName(e.target.value)}
+                        onInput={() => setErrorMessage('')}
                     />
                     <Input
                         placeholder='Фамилия...'
                         type='text'
                         value={userLastName}
                         onChange={(e) => setUserLastName(e.target.value)}
+                        onInput={() => setErrorMessage('')}
                     />
                     <Input
                         placeholder='День рождения'
                         type='date'
                         value={userBirthday}
                         onChange={(e) => setUserBirthday(e.target.value)}
+                        onInput={() => setErrorMessage('')}
                     />
                     <Input
                         placeholder='Номер телефона'
                         type='phone'
                         value={userPhoneNumber}
                         onChange={(e) => setUserPhoneNumber(e.target.value)}
+                        onInput={() => setErrorMessage('')}
                     />
                     <Select dataList={regions} title='Выберите регион' setValue={setRegion}/>
                     <Select dataList={cities} title='Выберите город' setValue={setCity}/>
