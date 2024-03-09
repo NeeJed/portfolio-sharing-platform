@@ -1,4 +1,5 @@
 Видео работы проекта: https://disk.yandex.ru/i/557jFy9qzNKZ9A
+GitHub Pages (не работает без бэка): https://neejed.github.io/portfolio-front/
 
 ![Снимок экрана 2024-01-04 183721](https://github.com/NeeJed/portfolio-sharing-platform/assets/64699656/168efb90-5076-446c-8f0e-890446f0cbe8)
 ![Снимок экрана 2024-01-04 183703](https://github.com/NeeJed/portfolio-sharing-platform/assets/64699656/1bf0b8f8-6b02-468c-96a3-8be12d2e30c1)
