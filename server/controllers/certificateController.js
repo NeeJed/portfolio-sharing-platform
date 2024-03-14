@@ -5,28 +5,28 @@ const { json } = require('sequelize');
 const ApiError = require('../error/ApiError');
 
 class CertificateController {
-    async create(req, res) {
-        const {name, categoryId, typeId, rankId, userId, info} = req.body
-        const {img} = req.files
-        let fileName = uuid.v4() + ".jpg"
-        img.mv(path.resolve(__dirname, '..', 'static', fileName))
+async create(req, res) {
+    const {name, categoryId, typeId, rankId, userId, info} = req.body
+    const {img} = req.files
+    let fileName = uuid.v4() + ".jpg"
+    img.mv(path.resolve(__dirname, '..', 'static', fileName))
 
-        console.log({name, categoryId, typeId, rankId, userId, img: fileName})
-        const certificate = await Certificate.create({name, categoryId, typeId, rankId, userId, img: fileName})
+    console.log({name, categoryId, typeId, rankId, userId, img: fileName})
+    const certificate = await Certificate.create({name, categoryId, typeId, rankId, userId, img: fileName})
 
-        if(info) {
-            let information = JSON.parse(info)
-            information.map(i => 
-                CertificateInfo.create({
-                    title: i.title,
-                    description: i.description,
-                    certificateId: certificate.id
-                })
-            )
-        }
-
-        return res.json(certificate)
+    if(info) {
+        let information = JSON.parse(info)
+        information.map(i => 
+            CertificateInfo.create({
+                title: i.title,
+                description: i.description,
+                certificateId: certificate.id
+            })
+        )
     }
+
+    return res.json(certificate)
+}
 
     async getAll(req, res) {
         let {typeId, rankId, limit, page} = req.query
