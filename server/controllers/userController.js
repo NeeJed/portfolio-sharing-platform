@@ -3,7 +3,10 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const path = require('path');
 const uuid = require('uuid');
-const {User, UserInfo, Certificate} = require('../models/models');
+// const {User, UserInfo, Certificate} = require('../models/models');
+const prisma = require('../prisma');
+const { user_infos } = require('../prisma');
+// users, user_infos, certificates
 
 const generateJwt = (id, email, role) => {
     return jwt.sign(
@@ -19,24 +22,30 @@ class UserController {
         if(!email || !password) {
             return next(ApiError.badRequest('Некорректный email или пароль'))
         }
-        const candidate = await User.findOne({where: {email}})
+        const candidate = await prisma.users.findUnique({where: {email}})
         if (candidate) {
             return next(ApiError.badRequest('Пользователь с таким email уже существует'))
         }
         const hashPassword = await bcrypt.hash(password, 5)
-        const user = await User.create({email, role, password: hashPassword})
+        const user = await prisma.users.create({data: {
+            email,
+            role,
+            password: hashPassword,
+        }})
         const token = generateJwt(user.id, user.email, user.role)
-        await UserInfo.create({
-            img: 'defaultUserImage.jpg',
-            userId: user.id,
-            name: user.email,
+        await prisma.user_infos.create({
+            data: {
+                img: 'defaultUserImage.jpg',
+                userId: Number(user.id),
+                name: user.email,
+            }
         })
         return res.json({token})
     }
 
     async login(req, res, next) {
         const {email, password} = req.body
-        const user = await User.findOne({where: {email}})
+        const user = await prisma.users.findUnique({where: {email}})
         if (!user) {
             return next(ApiError.internal('Пользователь с таким именем не найден'))
         }
@@ -55,61 +64,86 @@ class UserController {
 
     async getAllUsers(req, res, next) {
         let {categoryId, typeId, rankId, educationalStageId, limit, page} = req.query
-        page = page || 1
-        limit = limit || 7
-        categoryId = categoryId
-        typeId = typeId
-        rankId = rankId
+        page = Number(page) || 1
+        limit = Number(limit) || 6
+        categoryId = Number(categoryId)
+        typeId = Number(typeId)
+        rankId = Number(rankId)
         educationalStageId = educationalStageId
-        let offset = page * limit - limit
+        let skip = page * limit - limit
+
         let users
         let certificates
+        let count
         if (!categoryId && !typeId && !rankId) {
-            certificates = await Certificate.findAll()
+            certificates = await prisma.certificates.findMany()
         } else if (categoryId && !typeId && !rankId) {
-            certificates = await Certificate.findAll({where: {categoryId}})
+            certificates = await prisma.certificates.findMany({where: {categoryId}})
         } else if (!categoryId && typeId && !rankId) {
-            certificates = await Certificate.findAll({where: {typeId}})
+            certificates = await prisma.certificates.findMany({where: {typeId}})
         } else if (!categoryId && !typeId && rankId) {
-            certificates = await Certificate.findAll({where: {rankId}})
+            certificates = await prisma.certificates.findMany({where: {rankId}})
         } else if (categoryId && typeId && !rankId) {
-            certificates = await Certificate.findAll({where: {categoryId, typeId}})
+            certificates = await prisma.certificates.findMany({where: {categoryId, typeId}})
         } else if (categoryId && !typeId && rankId) {
-            certificates = await Certificate.findAll({where: {categoryId, rankId}})
+            certificates = await prisma.certificates.findMany({where: {categoryId, rankId}})
         } else if (!categoryId && typeId && rankId) {
-            certificates = await Certificate.findAll({where: {typeId, rankId}})
+            certificates = await prisma.certificates.findMany({where: {typeId, rankId}})
         } else if (categoryId && typeId && rankId) {
-            certificates = await Certificate.findAll({where: {
+            certificates = await prisma.certificates.findMany({where: {
                 categoryId,
                 typeId,
                 rankId,
             }})
         }
         let suitableUsers = []
-        certificates.map(certificate => suitableUsers.push(certificate.dataValues.userId))
+        certificates.map(certificate => suitableUsers.push(certificate.userId))
         suitableUsers = Array.from(new Set(suitableUsers))
         if (educationalStageId) {
-            users = await UserInfo.findAndCountAll({
+            users = await prisma.user_infos.findMany({
                 where: {
                     shareAccess: true,
-                    userId: suitableUsers,
+                    userId: {contains: suitableUsers},
                     educationalStageId: educationalStageId,
-                }, limit, offset
+                },
+                take: limit,
+                skip: skip,
+            })
+            count = await prisma.user_infos.count({
+                where: {
+                    shareAccess: true,
+                    userId: {contains: suitableUsers},
+                    educationalStageId: educationalStageId,
+                },
             })
         } else {
-            users = await UserInfo.findAndCountAll({
-                where: { shareAccess: true, userId: suitableUsers,}, limit, offset
+            users = await prisma.user_infos.findMany({
+                where: {
+                    shareAccess: true,
+                    userId: {in: suitableUsers},
+                },
+                take: limit,
+                skip: skip,
+            })
+            count = await prisma.user_infos.count({
+                where: {
+                    shareAccess: true,
+                    userId: {in: suitableUsers},
+                    educationalStageId: educationalStageId,
+                },
             })
         }
-        return res.json(users)
+        return res.json({users, count})
     }
 
     async getUserById(req, res, next) {
         const {id} = req.params
-        const user = await User.findOne(
+        const user = await prisma.users.findUnique(
             {
                 where: {id},
-                include: [{model: UserInfo}]
+                include: {
+                    user_infos: true,
+                }
             },
         )
         if (!user) {
@@ -120,9 +154,12 @@ class UserController {
 
     async getUserInfoById(req, res, next) {
         const {id} = req.params
-        const user = await UserInfo.findOne(
+        const user = await prisma.user_infos.findUnique(
             {
-                where: {userId: id},
+                where: {
+                    id: Number(id),
+                    userId: Number(id),
+                },
             },
         )
         if (!user) {
@@ -138,71 +175,94 @@ class UserController {
         const {id, access} = req.params
         let newAccess = access === 'true' ? false : true
         try {
-            const user = await UserInfo.update(
-                {
+            const user = await prisma.user_infos.update({
+                where: {
+                    id: Number(id),
+                },
+                data: {
                     shareAccess: newAccess,
-                }, 
-                {
-                    where: {
-                        userId: id,
-                    }
                 }
-            )
+            })
             return res.json(user)
         } catch (e) {
+            console.log('ошибка')
             return next(ApiError.badRequest('Ошибка изменения доступа'))
         }
     }
 
     async updateUserInfo(req, res, next) {
         const {id, name, lastName, birthday, phone, city, educationalStage, imgURL} = req.body
+        console.log(req.body)
         let fileName = imgURL || 'defaultUserImage.jpg'
         if (req.files) {
             const {img} = req.files
             fileName = uuid.v4() + ".jpg"
             img.mv(path.resolve(__dirname, '..', 'static', fileName))
         }
-        try {
-            const user = await UserInfo.update(
-                {
+        // try {
+            let user = await prisma.user_infos.update({
+                where: {
+                    id: Number(id)
+                },
+                data: {
                     name: name,
                     img: fileName,
-                }, 
-                {
-                    where: {
-                        userId: id,
-                    }
                 }
-            )
+            })
             if (lastName && lastName !== 'null') {
-                const user = await UserInfo.update({lastName: lastName,}, 
-                    {where: {userId: id}
+                user = await prisma.user_infos.update({
+                    data: {
+                        lastName: lastName
+                    },
+                    where: {
+                        id: Number(id)
+                    }
                 })
             }
             if (birthday && birthday !== 'null') {
-                const user = await UserInfo.update({birthday: birthday}, 
-                    {where: {userId: id}
+                user = await prisma.user_infos.update({
+                    data: {
+                        birthday: new Date(birthday)
+                    },
+                    where: {
+                        id: Number(id)
+                    }
                 })
             }
             if (phone && phone !== 'null') {
-                const user = await UserInfo.update({phoneNumber: phone}, 
-                    {where: {userId: id}
+                user = await prisma.user_infos.update({
+                    data: {
+                        phoneNumber: phone
+                    },
+                    where: {
+                        id: Number(id)
+                    }
                 })
             }
             if (city && city !== 'null') {
-                const user = await UserInfo.update({cityId: city}, 
-                    {where: {userId: id}
-                })
+                user = await prisma.user_infos.update({
+                    data: {
+                        cityId: Number(city)
+                    },
+                    where: {
+                        id: Number(id)
+                    }
+                }) 
             }
             if (educationalStage && educationalStage !== 'null') {
-                const user = await UserInfo.update({educationalStageId: educationalStage}, 
-                    {where: {userId: id}
-                })
+                user = await prisma.user_infos.update({
+                    data: {
+                        educationalStageId: Number(educationalStage)
+                    },
+                    where: {
+                        id: Number(id)
+                    }
+                }) 
             }
             return res.json(user)
-        } catch (e) {
-            return next(ApiError.badRequest('Ошибка изменения'))
-        }
+        // } catch (e) {
+        //     return next(ApiError.badRequest('Ошибка изменения'))
+        // }
     }
 }
 

@@ -1,25 +1,28 @@
-const {Rank} = require('../models/models');
+//const {Rank} = require('../models/models');
+const prisma = require('../prisma')
 const ApiError = require('../error/ApiError');
 
 class RankController {
     async create(req, res) {
         const {name} = req.body
-        const alreadyExists = await Rank.findOne({where: {name}})
+        const alreadyExists = await prisma.ranks.findUnique({where: {name}})
         if (alreadyExists) {
             return next(ApiError.badRequest(`Уровень с таким именем уже существует`))
         }
-        const rank = await Rank.create({name})
+        const rank = await prisma.ranks.create({
+            data: {name}
+        })
         return res.json(rank)
     }
 
     async getAll(req, res) {
-        const ranks = await Rank.findAll()
+        const ranks = await prisma.ranks.findMany()
         return res.json(ranks)
     }
 
     async getOneById(req, res, next) {
         const {id} = req.params
-        const rank = await Rank.findOne(
+        const rank = await prisma.ranks.findUnique(
             {
                 where: {id},
             },
@@ -32,9 +35,9 @@ class RankController {
 
     async deleteRank(req, res, next) {
         const {rankId} = req.params
-        const rank = await Rank.destroy({
+        const rank = await prisma.ranks.delete({
             where: {
-                id: rankId
+                id: Number(rankId),
             }
         })
         if (!rank) {

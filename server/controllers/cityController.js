@@ -1,11 +1,13 @@
-const {City} = require('../models/models');
+// const {City} = require('../models/models');
+const prisma = require('../prisma')
 const ApiError = require('../error/ApiError');
 
 class CityController {
     async getAll(req, res) {
-        const cities = await City.findAll({
-            attributes: ['id', 'name']
+        const cities = await prisma.cities.findMany({
+            //attributes: ['id', 'name']
         })
+        console.log(cities)
         return res.json(cities)
     }
 
@@ -13,10 +15,12 @@ class CityController {
         const {cityId} = req.params
         console.log(cityId)
         try {
-            const city = await City.findOne(
+            const city = await prisma.cities.findUnique(
                 {
-                    where: {id: cityId},
-                    attributes: ['id', 'name'],
+                    where: {
+                        id: Number(cityId)
+                    },
+                    //attributes: ['id', 'name'],
                 },
             )
             if (!city) {
@@ -30,9 +34,11 @@ class CityController {
 
     async getByRegionId(req, res) {
         const {regionId} = req.params
-        const cities = await City.findAll({
-            where: {regionId: regionId},
-            attributes: ['id', 'name'],
+        const cities = await prisma.cities.findMany({
+            where: {
+                regionId: Number(regionId),
+            },
+            //attributes: ['id', 'name'],
         })
         if (!cities) {
             return next(ApiError.internal(`Городов, относящихся к этому региону не найдено`))

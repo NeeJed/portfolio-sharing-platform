@@ -1,7 +1,7 @@
 const uuid = require('uuid');
 const path = require('path');
-const {Certificate, CertificateInfo} = require('../models/models');
-const { json } = require('sequelize');
+// const {Certificate, CertificateInfo} = require('../models/models');
+const prisma = require('../prisma')
 const ApiError = require('../error/ApiError');
 
 class CertificateController {
@@ -12,15 +12,26 @@ async create(req, res) {
     img.mv(path.resolve(__dirname, '..', 'static', fileName))
 
     console.log({name, categoryId, typeId, rankId, userId, img: fileName})
-    const certificate = await Certificate.create({name, categoryId, typeId, rankId, userId, img: fileName})
+    const certificate = await prisma.certificates.create({
+        data: {
+            name,
+            categoryId: Number(categoryId),
+            typeId: Number(typeId),
+            rankId: Number(rankId),
+            userId: Number(userId),
+            img: fileName,
+        }
+    })
 
     if(info) {
         let information = JSON.parse(info)
         information.map(i => 
-            CertificateInfo.create({
-                title: i.title,
-                description: i.description,
-                certificateId: certificate.id
+            prisma.certificate_infos.create({
+                data: {
+                    title: i.title,
+                    description: i.description,
+                    certificateId: certificate.id,
+                }
             })
         )
     }
@@ -35,26 +46,40 @@ async create(req, res) {
         let offset = page * limit - limit
         let certificates;
         if (!typeId && !rankId) {
-            certificates = await Certificate.findAndCountAll({limit, offset})
+            certificates = await prisma.certificates.findMany({limit, offset}),
+            count = await prisma.certificates.count({
+                limit, offset
+            })
         }
         if (typeId && !rankId) {
-            certificates = await Certificate.findAndCountAll({where: {typeId}, limit, offset})
+            certificates = await prisma.certificates.findMany({where: {typeId}, limit, offset})
+            count = await prisma.certificates.count({
+                where: {typeId}, limit, offset
+            })
         }
         if (!typeId && rankId) {
-            certificates = await Certificate.findAndCountAll({where: {rankId}, limit, offset})
+            certificates = await prisma.certificates.findMany({where: {rankId}, limit, offset})
+            count = await prisma.certificates.count({
+                where: {rankId}, limit, offset
+            })
         }
         if (typeId && rankId) {
-            certificates = await Certificate.findAndCountAll({where: {typeId, rankId}, limit, offset})
+            certificates = await prisma.certificates.findMany({where: {typeId, rankId}, limit, offset})
+            count = await prisma.certificates.count({
+                where: {typeId, rankId}, limit, offset
+            })
         }
-        return res.json(certificates)
+        return res.json({certificates, count})
     }
 
     async getOne(req, res, next) {
         const {id} = req.params
-        const certificate = await Certificate.findOne(
+        const certificate = await prisma.certificates.findUnique(
             {
                 where: {id},
-                include: [{model: CertificateInfo, as: 'info'}]
+                include: {
+                    certificate_infos: true,
+                }
             },
         )
         if (!certificate) {
@@ -65,19 +90,21 @@ async create(req, res) {
 
     async getAllByUserId(req, res, next) {
         const {id} = req.params
-        console.log(id)
-        // limit = 6;
-        const certificate = await Certificate.findAndCountAll(
-            {
-                // limit,
-                where: {userId: id},
-                include: [{model: CertificateInfo, as: 'info'}]
+        //let limit = 6;
+        const certificate = await prisma.certificates.findMany({
+            //limit,
+            where: {userId: Number(id)},
+            include: {
+                certificate_infos: true,
             },
-        )
+        })
+        const count = await prisma.certificates.count({
+            where: {userId: Number(id)},
+        })
         if (!certificate) {
             return next(ApiError.internal(`Сертификаты не найдены`))
         }
-        return res.json(certificate)
+        return res.json({certificate, count})
     }
 
     async update(req, res, next) {
@@ -89,28 +116,28 @@ async create(req, res) {
             img.mv(path.resolve(__dirname, '..', 'static', fileName))
         }
         
-        console.log({name, categoryId, typeId, rankId, userId, img: fileName})
+        console.log({id, name, categoryId, typeId, rankId, userId, img: fileName})
         try {
-            const certificate = await Certificate.update(
-                {
-                    name: name, 
-                    categoryId: categoryId, 
-                    typeId: typeId, 
-                    rankId: rankId,
-                    img: fileName
+            const certificate = await prisma.certificates.update({
+                where: {
+                    id: Number(id),
                 },
-                {
-                    where: {
-                        id: id,
-                    }
+                data: {
+                    name: name, 
+                    categoryId: Number(categoryId), 
+                    typeId: Number(typeId), 
+                    rankId: Number(rankId),
+                    img: fileName,
                 }
-            )
+            })
             if(info) {
                 let information = JSON.parse(info)
                 information.map(i => 
-                    CertificateInfo.update({
-                        title: i.title,
-                        description: i.description,
+                    prisma.certificate_infos.update({
+                        data: {
+                            title: i.title,
+                            description: i.description,
+                        }
                     })
                 )
             }
@@ -122,9 +149,9 @@ async create(req, res) {
 
     async delete(req, res, next) {
         const {id} = req.params
-        const certificate = await Certificate.destroy({
+        const certificate = await prisma.certificates.delete({
             where: {
-                id: id
+                id: Number(id)
             }
         })
         if (!certificate) {

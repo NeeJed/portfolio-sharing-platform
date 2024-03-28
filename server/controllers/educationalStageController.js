@@ -1,30 +1,33 @@
-const {EducationalStage} = require('../models/models');
+// const {EducationalStage} = require('../models/models');
+const prisma = require('../prisma')
 const ApiError = require('../error/ApiError');
 
 class EducationalStageController {
     async create(req, res) {
         const {name} = req.body
-        const alreadyExists = await EducationalStage.findOne({where: {name}})
+        const alreadyExists = await prisma.educational_stages.findUnique({where: {name}})
         if (alreadyExists) {
             return next(ApiError.badRequest(`Уровень образования с таким именем уже существует`))
         }
-        const educationalStage = await EducationalStage.create({name})
+        const educationalStage = await prisma.educational_stages.create({
+            data: {name}
+        })
         return res.json(educationalStage)
     }
 
     async getAll(req, res) {
-        const educationalStages = await EducationalStage.findAll({
-            attributes: ['id', 'name']
+        const educationalStages = await prisma.educational_stages.findMany({
+            //attributes: ['id', 'name']
         })
         return res.json(educationalStages)
     }
 
     async getOneById(req, res, next) {
         const {id} = req.params
-        const educationalStage = await EducationalStage.findOne(
+        const educationalStage = await prisma.educational_stages.findUnique(
             {
                 where: {id},
-                attributes: ['id', 'name'],
+                //attributes: ['id', 'name'],
             },
         )
         if (!educationalStage) {
@@ -35,9 +38,9 @@ class EducationalStageController {
 
     async delete(req, res, next) {
         const {id} = req.params
-        const educationalStage = await EducationalStage.destroy({
+        const educationalStage = await prisma.educational_stages.delete({
             where: {
-                id: id
+                id: Number(id)
             }
         })
         if (!educationalStage) {
@@ -45,7 +48,6 @@ class EducationalStageController {
         }
         return res.json(educationalStage)
     }
-
 }
 
 module.exports = new EducationalStageController()

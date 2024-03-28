@@ -1,20 +1,21 @@
-const {Region} = require('../models/models');
+// const {Region} = require('../models/models');
+const prisma = require('../prisma')
 const ApiError = require('../error/ApiError');
 
 class RegionController {
     async getAll(req, res) {
-        const regions = await Region.findAll({
-            attributes: ['id', 'name']
+        const regions = await prisma.regions.findMany({
+            //attributes: ['id', 'name']
         })
         return res.json(regions)
     }
 
     async getOneById(req, res, next) {
         const {id} = req.params
-        const region = await Region.findOne(
+        const region = await prisma.regions.findUnique(
             {
                 where: {id},
-                attributes: ['id', 'name'],
+                //attributes: ['id', 'name'],
             },
         )
         if (!region) {
