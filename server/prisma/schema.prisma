@@ -1,0 +1,124 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  previewFeatures = ["nativeTypes"]
+}
+
+model categories {
+  id           Int            @id @default(autoincrement())
+  name         String         @unique @db.VarChar(255)
+  createdAt    DateTime       @db.Timestamptz(6)
+  updatedAt    DateTime       @db.Timestamptz(6)
+  certificates certificates[]
+  types        types[]
+}
+
+model certificate_infos {
+  id            Int           @id @default(autoincrement())
+  title         String        @db.VarChar(255)
+  description   String?       @db.VarChar(255)
+  createdAt     DateTime      @db.Timestamptz(6)
+  updatedAt     DateTime      @db.Timestamptz(6)
+  certificateId Int?
+  certificates  certificates? @relation(fields: [certificateId], references: [id])
+}
+
+model certificates {
+  id                Int                 @id @default(autoincrement())
+  name              String              @db.VarChar(255)
+  img               String              @db.VarChar(255)
+  createdAt         DateTime            @db.Timestamptz(6)
+  updatedAt         DateTime            @db.Timestamptz(6)
+  userId            Int?
+  categoryId        Int?
+  typeId            Int?
+  rankId            Int?
+  certificate_infos certificate_infos[]
+  categories        categories?         @relation(fields: [categoryId], references: [id])
+  ranks             ranks?              @relation(fields: [rankId], references: [id])
+  types             types?              @relation(fields: [typeId], references: [id])
+  users             users?              @relation(fields: [userId], references: [id])
+}
+
+model cities {
+  id         Int          @id @default(autoincrement())
+  name       String?      @db.VarChar(255)
+  regionId   Int?
+  regions    regions?     @relation(fields: [regionId], references: [id])
+  user_infos user_infos[]
+}
+
+model educational_stages {
+  id         Int          @id @default(autoincrement())
+  name       String?      @unique @db.VarChar(255)
+  createdAt  DateTime     @db.Timestamptz(6)
+  updatedAt  DateTime     @db.Timestamptz(6)
+  user_infos user_infos[]
+}
+
+model ranks {
+  id           Int            @id @default(autoincrement())
+  name         String?        @unique @db.VarChar(255)
+  createdAt    DateTime       @db.Timestamptz(6)
+  updatedAt    DateTime       @db.Timestamptz(6)
+  certificates certificates[]
+}
+
+model ratings {
+  id        Int      @id @default(autoincrement())
+  rate      Int
+  createdAt DateTime @db.Timestamptz(6)
+  updatedAt DateTime @db.Timestamptz(6)
+  userId    Int?
+  users     users?   @relation(fields: [userId], references: [id])
+}
+
+model regions {
+  id     Int      @id @default(autoincrement())
+  name   String?  @unique @db.VarChar(255)
+  cities cities[]
+}
+
+model types {
+  id           Int            @id @default(autoincrement())
+  name         String         @db.VarChar(255)
+  createdAt    DateTime       @db.Timestamptz(6)
+  updatedAt    DateTime       @db.Timestamptz(6)
+  categoryId   Int?
+  certificates certificates[]
+  categories   categories?    @relation(fields: [categoryId], references: [id])
+}
+
+model user_infos {
+  id                 Int                 @id @default(autoincrement())
+  name               String              @db.VarChar(255)
+  lastName           String?             @db.VarChar(255)
+  img                String              @db.VarChar(255)
+  shareAccess        Boolean?            @default(false)
+  birthday           DateTime?           @db.Date
+  phoneNumber        String?             @db.VarChar(255)
+  createdAt          DateTime            @db.Timestamptz(6)
+  updatedAt          DateTime            @db.Timestamptz(6)
+  userId             Int?
+  educationalStageId Int?
+  cityId             Int?
+  cities             cities?             @relation(fields: [cityId], references: [id])
+  educational_stages educational_stages? @relation(fields: [educationalStageId], references: [id])
+  users              users?              @relation(fields: [userId], references: [id])
+}
+
+model users {
+  id           Int            @id @default(autoincrement())
+  email        String?        @unique @db.VarChar(255)
+  password     String?        @db.VarChar(255)
+  role         String?        @default("USER") @db.VarChar(255)
+  createdAt    DateTime       @db.Timestamptz(6)
+  updatedAt    DateTime       @db.Timestamptz(6)
+  certificates certificates[]
+  ratings      ratings[]
+  user_infos   user_infos[]
+}
