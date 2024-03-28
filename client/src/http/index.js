@@ -1,5 +1,8 @@
 import axios from 'axios';
 
+axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded'
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+
 const $host = axios.create({
     baseURL: process.env.REACT_APP_API_URL
 })
@@ -10,7 +13,6 @@ const $authHost = axios.create({
 
 const authInterceptor = config => {
     config.headers.authorization = `Bearer ${localStorage.getItem('token')}`
-    config.headers.common['Access-Control-Allow-Origin'] = '*';
     return config
 }
 
