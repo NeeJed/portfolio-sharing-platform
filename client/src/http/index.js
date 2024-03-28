@@ -10,6 +10,7 @@ const $authHost = axios.create({
 
 const authInterceptor = config => {
     config.headers.authorization = `Bearer ${localStorage.getItem('token')}`
+    config.headers.common['Access-Control-Allow-Origin'] = '*';
     return config
 }
 
