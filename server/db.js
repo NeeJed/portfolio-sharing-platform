@@ -8,16 +8,5 @@ module.exports = new Sequelize(
         dialect: 'postgres',
         host: process.env.DB_HOST,
         port: process.env.DB_PORT,
-        url: process.env.POSTGRES_URL,
     }
 )
-
-// const { Pool } = require('pg');
-
-// const pool = new Pool({
-//   connectionString: process.env.POSTGRES_URL,
-// })
-
-// pool.connect();
-
-// module.exports = pool;
