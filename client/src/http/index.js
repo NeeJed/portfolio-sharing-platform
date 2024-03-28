@@ -13,6 +13,9 @@ const $authHost = axios.create({
 
 const authInterceptor = config => {
     config.headers.authorization = `Bearer ${localStorage.getItem('token')}`
+    conifg.headers.common['Access-Control-Allow-Origin'] = '*' 
+    conifg.headers.common['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS, PUT, DELETE' 
+    conifg.headers.common['Access-Control-Allow-Headers'] = 'Origin, Content-Type, X-Auth-Token' 
     return config
 }
 
