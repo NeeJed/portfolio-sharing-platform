@@ -59,8 +59,8 @@ const UserPage = () => {
     const getUserCertificates = async () => {
         try {
             let {data} = await fetchCertificatesByUserId(id)
-            console.log(data.rows);
-            setUserCertificates(data.rows)
+            console.log(data)
+            setUserCertificates(data)
         } catch (e) {
             console.log(e)
         } finally {
@@ -110,7 +110,7 @@ const UserPage = () => {
                     ?
                         userCertificates
                         ?
-                            userCertificates.map(certificate =>
+                            userCertificates.certificate.map(certificate =>
                                 <UserCertificate key={certificate.id} certificate={certificate}/>
                             )
                         :

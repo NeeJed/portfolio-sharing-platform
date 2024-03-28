@@ -76,7 +76,7 @@ const UserCertificateInfoModal = ({setModalIsActive, certificate, setTooltipIsOp
                     <DescriptionLine descriptionName='Тип' descriptionData={type.name}/>
                     <DescriptionLine descriptionName='Уровень' descriptionData={rank.name}/>
                 </div>
-                {certificate.info.length > 0 && certificate.info.map((info, index) => 
+                {certificate.certificate_infos.length > 0 && certificate.certificate_infos.map((info, index) => 
                     <div className={classes.info} key={index}>
                         <DescriptionLine descriptionName={info.title} descriptionData={info.description}/>
                     </div>

@@ -114,7 +114,7 @@ const Profile = () => {
 
     const updateShareAccess = async () => {
         try {
-            let data = await updateUserShareAccess(user.id, userInfo.shareAccess)
+            let data = await updateUserShareAccess(userInfo.id, userInfo.shareAccess)
         } catch (e) {
             console.log(e)
         } finally {
@@ -254,9 +254,9 @@ const Profile = () => {
                     </Portal>
                 }
                 <div className={classes.profileCertificates}>
-                    {userCertificates.rows
+                    {userCertificates.count
                     ?
-                        userCertificates.rows.map(certificate =>
+                        userCertificates.certificate.map(certificate =>
                             <UserCertificate key={certificate.id} certificate={certificate}/>
                         )
                     :

@@ -158,20 +158,24 @@ const CreateCertificate = ({setModalIsActive, setTooltipIsOpen, isEdit = false, 
                             onClick={addInfo}
                             title='Добавить описание'
                         />
-                        {info.map(i =>
-                            <div key={i.number}>
-                                <input
-                                    placeholder='Введите название описания'
-                                    value={i.title}
-                                    onChange={(e) => changeInfo('title', e.target.value, i.number)}
-                                />
-                                <input
-                                    placeholder='Введите описание'
-                                    value={i.description}
-                                    onChange={(e) => changeInfo('description', e.target.value, i.number)}
-                                />
-                            </div>
-                        )}
+                        {info ? 
+                            info.map(i =>
+                                <div key={i.number}>
+                                    <input
+                                        placeholder='Введите название описания'
+                                        value={i.title}
+                                        onChange={(e) => changeInfo('title', e.target.value, i.number)}
+                                    />
+                                    <input
+                                        placeholder='Введите описание'
+                                        value={i.description}
+                                        onChange={(e) => changeInfo('description', e.target.value, i.number)}
+                                    />
+                                </div>
+                            )
+                            :
+                            <div></div>
+                        }
                         <div className={classes.createCertificate_imgPreview}>
                             {file &&
                                 <img src={URL.createObjectURL(file)}/>

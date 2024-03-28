@@ -69,9 +69,9 @@ const Search = () => {
                 selectedCategories, selectedTypes, selectedRanks, selectedEducationalStages, page, limit
             )
             console.log(selectedEducationalStages)
-            dispatch(setStudents(data.rows))
+            dispatch(setStudents(data.users))
             dispatch(setTotalResults(data.count))
-            console.log('студенты: ', data.rows)
+            console.log('студенты: ', data.users)
         } catch (e) {
             console.log(e)
         } finally {

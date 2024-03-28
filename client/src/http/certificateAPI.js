@@ -88,6 +88,7 @@ export const fetchCertificatesByUserId = async (id) => {
 
 export const updateCertificate = async (certificate) => {
     const {data} = await $authHost.put('/api/certificate/update', certificate)
+    console.log(data)
     return {data}
 }
 

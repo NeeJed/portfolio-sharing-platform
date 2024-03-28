@@ -85,7 +85,7 @@ const UserCard = ({user}) => {
                 :
                     userCertificates.count
                     ?
-                        userCertificates.rows.map((certificate, index) => 
+                        userCertificates.certificate.map((certificate, index) => 
                             index < 12 &&
                             <div
                                 className={classes.certificate}
