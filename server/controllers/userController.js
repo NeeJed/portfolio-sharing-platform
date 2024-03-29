@@ -194,11 +194,11 @@ class UserController {
         const {id, name, lastName, birthday, phone, city, educationalStage, imgURL} = req.body
         console.log(req.body)
         let fileName = imgURL || 'defaultUserImage.jpg'
-        if (req.files) {
-            const {img} = req.files
-            fileName = uuid.v4() + ".jpg"
-            img.mv(path.resolve(__dirname, '..', 'tmp/static', fileName))
-        }
+        // if (req.files) {
+        //     const {img} = req.files
+        //     fileName = uuid.v4() + ".jpg"
+        //     img.mv(path.resolve(__dirname, '..', 'tmp/static', fileName))
+        // }
         // try {
             let user = await prisma.user_infos.update({
                 where: {
@@ -206,7 +206,7 @@ class UserController {
                 },
                 data: {
                     name: name,
-                    img: fileName,
+                    //img: fileName,
                 }
             })
             if (lastName && lastName !== 'null') {
