@@ -197,7 +197,7 @@ class UserController {
         if (req.files) {
             const {img} = req.files
             fileName = uuid.v4() + ".jpg"
-            img.mv(path.resolve(__dirname, '..', 'static', fileName))
+            img.mv(path.resolve(__dirname, '..', 'tmp/static', fileName))
         }
         // try {
             let user = await prisma.user_infos.update({

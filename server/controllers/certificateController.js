@@ -9,7 +9,7 @@ async create(req, res) {
     const {name, categoryId, typeId, rankId, userId, info} = req.body
     const {img} = req.files
     let fileName = uuid.v4() + ".jpg"
-    img.mv(path.resolve(__dirname, '..', 'static', fileName))
+    img.mv(path.resolve(__dirname, '..', 'tmp/static', fileName))
 
     console.log({name, categoryId, typeId, rankId, userId, img: fileName})
     const certificate = await prisma.certificates.create({
@@ -113,7 +113,7 @@ async create(req, res) {
         if (req.files) {
             const {img} = req.files
             fileName = uuid.v4() + ".jpg"
-            img.mv(path.resolve(__dirname, '..', 'static', fileName))
+            img.mv(path.resolve(__dirname, '..', 'tmp/static', fileName))
         }
         
         console.log({id, name, categoryId, typeId, rankId, userId, img: fileName})
